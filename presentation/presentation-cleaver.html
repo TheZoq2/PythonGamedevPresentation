@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <title>Untitled</title>
   <style type="text/css">
+    
     body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #222;
@@ -271,14 +272,14 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 .hljs-comment,
 .hljs-quote {
-  color: #998;
+  color: #0E9F1A;
   font-style: italic;
 }
 
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-subst {
-  color: #333;
+  color: #CF74C1;
   font-weight: bold;
 }
 
@@ -355,42 +356,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   font-weight: bold;
 }
 
-body {
-  background-color: #222;
-  color: #eee;
-}
 
-h1, h3 {
-  font-family: Impact;
-  font-weight: bold;
-  font-style: italic;
-}
-
-pre code {
-  color: #ccc;
-  font-size: 140%;
-}
-
-.slide {
-  background-color: inherit;
-}
-
-.keyword {
-  color: #0086b3 !important;
-  font-weight: inherit !important;
-}
-
-.tag {
-  color: #900 !important;
-}
-
-code {
-  background-color: inherit;
-}
-
-em {
-  border-bottom: 1px solid #666;
-}
+  
 
   </style>
 </head>
@@ -406,20 +373,6 @@ em {
 </section>
   </div>
   <div class="slide hidden -" id="slide-2">
-    <section class="slide-content"><h3 id="libraries">Libraries</h3>
-<ul>
-<li><p>Pygame </p>
-</li>
-<li><p>PySFML (unmaintained)</p>
-</li>
-<li><p>PySDL2 (what I will show you)</p>
-</li>
-<li><p>Cocos2D</p>
-</li>
-</ul>
-</section>
-  </div>
-  <div class="slide hidden -" id="slide-3">
     <section class="slide-content"><h3 id="components-of-a-game">Components of a game</h3>
 <ul>
 <li><p>Graphics</p>
@@ -433,34 +386,155 @@ em {
 </ul>
 </section>
   </div>
+  <div class="slide hidden -" id="slide-3">
+    <section class="slide-content"><h3 id="libraries">Libraries</h3>
+<ul>
+<li><p>Pygame (What I will show you)</p>
+</li>
+<li><p>PySFML (unmaintained)</p>
+</li>
+<li><p>PySDL2</p>
+</li>
+<li><p>Cocos2D</p>
+</li>
+<li><p>Panda3D</p>
+</li>
+</ul>
+</section>
+  </div>
   <div class="slide hidden -" id="slide-4">
-    <section class="slide-content"><h3 id="sdl2">SDL2</h3>
+    <section class="slide-content"><h3 id="pygame">Pygame</h3>
 <p>Install the library</p>
-<pre><code class="lang-Bash">&gt; pip install pysdl2</code></pre>
+<pre><code class="lang-Bash">&gt; pip3 install pygame</code></pre>
 <p>Import it in your project</p>
-<pre><code class="lang-Python"><span class="hljs-keyword">import</span> sdl2
-<span class="hljs-keyword">import</span> sdl2.ext
+<pre><code class="lang-python"><span class="hljs-keyword">import</span> pygame
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
-    print(<span class="hljs-string">"Hello world"</span>)
+    pygame.init()
+
+    WINDOW_SIZE = (<span class="hljs-number">1024</span>, <span class="hljs-number">768</span>)
+    screen = pygame.display.set_mode(WINDOW_SIZE)
 
 main()</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-5">
-    <section class="slide-content"><h3 id="the-main-loop">The main loop</h3>
-<pre><code class="lang-Python"><span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:
-    handle_user_input()
-
-    do_game_stuff()
-
-    draw_things()
-
-    present_to_window()</code></pre>
+    <section class="slide-content"><h3 id="events">Events</h3>
+<p>Events are sent to the window from the outside world</p>
+<pre><code class="lang-python">running = <span class="hljs-keyword">True</span> <span class="hljs-comment">#True as long as the game should be running</span>
+<span class="hljs-keyword">while</span> running:
+    <span class="hljs-keyword">for</span> event <span class="hljs-keyword">in</span> pygame.event.get():
+        <span class="hljs-keyword">if</span> event.type == pygame.QUIT:
+            running = <span class="hljs-keyword">False</span></code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-6">
-    <section class="slide-content"></section>
+    <section class="slide-content"><h3 id="draw-something">Draw something</h3>
+<p>Load an image</p>
+<pre><code class="lang-python">image = pygame.image.load(<span class="hljs-string">"path/to/image"</span>)</code></pre>
+<p>Drawing the image to our window</p>
+<pre><code class="lang-python">screen.blit(image, image.get_rect())</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-7">
+    <section class="slide-content"><h3 id="in-our-code">In our code</h3>
+<pre><code class="lang-python">image = pygame.image.load(<span class="hljs-string">"resources/ghost.png"</span>)
+
+running = <span class="hljs-keyword">True</span>
+<span class="hljs-keyword">while</span> running:
+    screen.blit(image, image.get_rect())
+
+...</code></pre>
+<p>Showing what we drew</p>
+<pre><code class="lang-python">pygame.display.flip()</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-8">
+    <section class="slide-content"><h3 id="changing-the-image">Changing the image</h3>
+<h4 id="position-is-changed-by-the-blit-function">Position is changed by the <code>blit</code> function</h4>
+<pre><code class="lang-python">screen.blit(image, (x, y))</code></pre>
+<h4 id="scale-and-rotation-with-pygame-transform-">Scale and rotation with <code>pygame.transform</code></h4>
+<p>Scale</p>
+<pre><code class="lang-python">new_resolution = (width, height)
+new_image = pygame.transform.scale(original, new_resolution)</code></pre>
+<p>Rotation</p>
+<pre><code class="lang-python">new_image = pygame.transform.rotate(original, new_angle)</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-9">
+    <section class="slide-content"><h3 id="continuous-movement">Continuous movement</h3>
+<pre><code class="lang-python">position = <span class="hljs-number">0</span>
+running = <span class="hljs-keyword">False</span>
+<span class="hljs-keyword">while</span> running:
+    position += <span class="hljs-number">0.1</span>
+    screen.blit(image, (position,<span class="hljs-number">100</span>))
+    ...</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-10">
+    <section class="slide-content"><h3 id="easiest-way-to-refresh-the-sceeen">Easiest way to refresh the sceeen</h3>
+<p>Redraw the background each frame</p>
+<pre><code class="lang-python">background = pygame.image.load(<span class="hljs-string">"resources/background.png"</span>)
+
+<span class="hljs-comment">#...</span>
+
+<span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:
+    image.blit(background, (<span class="hljs-number">0</span>,<span class="hljs-number">0</span>))
+
+    draw_rest_of_game()
+    ...</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-11">
+    <section class="slide-content"><h3 id="rotation-och-pygame">Rotation och pygame</h3>
+<p>Same code as position but for rotation</p>
+<pre><code class="lang-python">angle = <span class="hljs-number">0</span>
+running = <span class="hljs-keyword">False</span>
+<span class="hljs-keyword">while</span> running:
+    <span class="hljs-comment">#Rotate and draw the image</span>
+    rotated = pygame.transform.rotate(image, angle)
+    screen.blit(rotated, (<span class="hljs-number">100</span>,<span class="hljs-number">100</span>))
+
+    angle += <span class="hljs-number">0.1</span> <span class="hljs-comment">#Increase angle</span>
+    ...</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-12">
+    <section class="slide-content"><h3 id="rotation-and-pygame">Rotation and pygame</h3>
+<p>We want to rotate this image</p>
+<p><img src="img/rotation1.svg" alt="Rotation 1"></p>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-13">
+    <section class="slide-content"><h3 id="rotation-and-pygame">Rotation and pygame</h3>
+<p>Pygame wants a new image</p>
+<p><img src="img/rotation2.svg" alt="Rotation 2"></p>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-14">
+    <section class="slide-content"><h3 id="rotation-and-pygame">Rotation and pygame</h3>
+<p>Negative pixels are not allowed</p>
+<p><img src="img/rotation3.svg" alt="Rotation 3"></p>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-15">
+    <section class="slide-content"><h3 id="rotation-and-pygame">Rotation and pygame</h3>
+<p>Original image</p>
+<p><img src="img/rotation1.svg" alt="Rotation 4"></p>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-16">
+    <section class="slide-content"><h3 id="rotation-around-center">Rotation around center</h3>
+<pre><code class="lang-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">draw_translated_image</span><span class="hljs-params">(image, screen, position, scale, rotation)</span>:</span>
+    <span class="hljs-comment">#Apply the rotation and scale we want</span>
+    scaled = pygame.transform.scale(image, scale)
+    rotated = pygame.transform.rotate(scaled, rotation)
+
+    <span class="hljs-comment">#Calculate the center of the image</span>
+    (offset_x, offset_y) = (rotated.get_width() / <span class="hljs-number">2</span>, rotated.get_height() / <span class="hljs-number">2</span>)
+
+    screen.blit(rotated, (position[<span class="hljs-number">0</span>] - offset_x, position[<span class="hljs-number">1</span>] - offset_y))</code></pre>
+</section>
   </div>
 
   <div class="controls">
@@ -470,18 +544,12 @@ main()</code></pre>
 
 
   <script type="text/javascript">
-    /**
- * Returns the current page number of the presentation.
- */
+    /* Returns the current page number of the presentation */
 function currentPosition() {
   return parseInt(document.querySelector('.slide:not(.hidden)').id.slice(6));
 }
 
-
-/**
- * Navigates forward n pages
- * If n is negative, we will navigate in reverse
- */
+/* Navigates forward n pages (navigate in reverse if n is negative) */
 function navigate(n) {
   var position = currentPosition();
   var numSlides = document.getElementsByClassName('slide').length;
@@ -500,22 +568,12 @@ function navigate(n) {
   updateTabIndex();
 }
 
-
-/**
- * Updates the current URL to include a hashtag of the current page number.
- */
+/* Updates the current URL to include a hashtag of the current page number */
 function updateURL() {
-  try {
-    window.history.replaceState({} , null, '#' + currentPosition());
-  } catch (e) {
-    window.location.hash = currentPosition();
-  }
+  window.location.hash = currentPosition();
 }
 
-
-/**
- * Sets the progress indicator.
- */
+/* Sets the progress indicator */
 function updateProgress() {
   var progressBar = document.querySelector('.progress-bar');
 
@@ -526,7 +584,6 @@ function updateProgress() {
     progressBar.style.width = percent.toString() + '%';
   }
 }
-
 
 /**
  * Removes tabindex property from all links on the current slide, sets
@@ -548,9 +605,7 @@ function updateTabIndex() {
   }
 }
 
-/**
- * Determines whether or not we are currently in full screen mode
- */
+/* Determines whether or not we are currently in full screen mode */
 function isFullScreen() {
   return document.fullscreenElement ||
          document.mozFullScreenElement ||
@@ -619,7 +674,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
   }
 });
-
 
   </script>
 </body>

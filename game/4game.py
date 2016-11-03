@@ -4,16 +4,6 @@ import pygame
 import random
 
 
-def draw_translated_image(image, screen, position, scale, rotation):
-    #Apply the rotation and scale we want
-    scaled = pygame.transform.scale(image, scale)
-    rotated = pygame.transform.rotate(scaled, rotation)
-
-    #Calculate the center of the image
-    (offset_x, offset_y) = (rotated.get_width() / 2, rotated.get_height() / 2)
-
-    screen.blit(rotated, (position[0] - offset_x, position[1] - offset_y))
-
 
 def main():
     """
@@ -27,15 +17,23 @@ def main():
     screen = pygame.display.set_mode(WINDOW_SIZE)
 
     image = pygame.image.load("resources/ghost.png")
-    background = pygame.image.load("resources/background.png")
 
     angle = 0
     running = True
     while running:
-        screen.blit(background, (0, 0))
+        #The original image
+        screen.blit(image, image.get_rect())
 
-        draw_translated_image(image, screen, (100, 100), (200, 200), angle)
-        angle += 0.5
+        #A moved image
+        screen.blit(image, (100, 100))
+
+        #A rotated version of the image
+        rotated = pygame.transform.rotate(image, 45)
+        screen.blit(rotated, (400, 100))
+
+        #A scaled version of the image
+        scaled = pygame.transform.scale(image, (400, 400))
+        screen.blit(scaled, (700, 100))
 
         pygame.display.flip()
 

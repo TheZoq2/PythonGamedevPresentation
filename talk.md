@@ -2,85 +2,47 @@
 
 Introduction
 
+#Components of a game
+
+What components do you need to make a game?
+
+Graphics, Something to look at. text based, 2d, 3d
+
+Input Need to interract
+
+Sound, often forgotten
+
+Other?
+
 
 #Library choise:
 
 In order to draw graphics using python (or any other language), you need to use an external library. 
 Unfortunley, when it comes to python, there is a lack of good graphics libraries. 
 
-A lot of people would suggest using pygame which is a good option. It is well maintained and a lot of people
-have used it during previous gamejams. However, the documentation isn't the best and it doesn't support
-hardware acceleration which may make your game slow. That shouldn't be a problem but along with the lack
-of hardware acceleration comes another issue: you can't rotate images without some extra code. There are
-some other caviates with pygame but it is still a great library which you should atleast have a look
-at if you are interested.
+Pygame is widely suggested. I will show it today
 
-Last gamejam, I wanted to use something other than pygame for my game and I came across pysfml. It is a
-great library, it's based on a well established C++ library and did things the way you would expect. However,
-it is not maintained anymore, is not in any package managers and does not compile right now.
+PySFML is unmaintained :(
 
-For that reason, I have decided to do this presentation on a library called PySDL. SDL is a low level 
-graphics library that is well established in other languages. The python bindings are maintained
-and the documentation seems decent. It does have some caviates of its own though, which I will get to later.
+PySDL2, I will show alternative code for sdl2
 
-There are some other libraries out there that may also be of interest. I have tried cocos2d during a gamejam
-but it is not as simple as the other libraries and does things in a different way. There are also things
-like panda 3d if you want to go down the 3d route.
-
-
-#Components of a game
-
-What components do you need to make a game?
-
-The first thing we need is graphics. The players need to be able to see what's going on in the game while
-playing. This could be anything from a text based interface to fancy 3d graphics. Today we will only
-use simple 2d graphics, both because it's a lot easier than 3d graphics and because it is what SDL supports.
-For most gamejam games, 2d graphics is the perfect balance between graphics quality and ease of development.
-
-Another thing we need is input. Most games would be pretty boring if you were unable to interract with them.
-SDL supports a wide variety of input devices but for this game, we will just use the keyboard.
-
-Another thing which is usually forgotten during gamejams is sound. SDL supports playing sounds aswell
-so if we have time, we will add it to this game.
+Others like cocos2d and panda3d
 
 
 #Getting started with SDL
 
-SDL, unlike most other libraries you have used so far in the introductory course is not built into python
-so you will have to install it yourself. Luckily, python has a really neat tool for installing libraries
-called pip. On most linux distros, you can install it using the package manager of your choise. For windows,
-the process might be a bit more involved but it should be fairly simple.
+Install using pip. Package manager on linux, woodoo on windows
 
-Once you have acquired pip, you simply need to run `pip install pysdl2` and it will download and install
-the library for you.
+`pip3 install pygame`
 
-With the library installed by pip, you should be able to simply import it into your python program. So lets
-open a new file and type `import sdl2`, the base library, aswell as `import sdl2.ext` which provides more
-advanced features for using SDL with python specifically.
+`import pygame`
 
-If we run the file and everything is installed correctly, it should simply exit without any error messages.
-Good, it did. Time to make the actual game
+Show that it runs
 
 
 #The downside of SDL
-Like I mentioned in the beginning of the presentation, sdl2 has some downsides. The main one being that
-some boilerplate code is required for using the hardware accelerated graphics which I mentioned earlier. 
-The code required is around 100 lines and I have created a simple python file which you can import into 
-your project that should make using SDL easier. 
 
-The file can be found at `github.com/thezoq2/...`
 
-Let's download it.
-`wget <url>`
-
-For those that don't know, wget downloads files from the terminal.
-
-Once we have it downloaded, we can import it into the project by writing `from render_util import Renderer`.
-
-Now we can test it out by writing `renderer = Renderer(<title>, <screen resolution as tuple>)`
-
-If we run this code, we see a window popping up briefly. This means that the renderer works, but we have no
-code for our game which means that the script exits immeadietly. 
 
 #The game loop
 Most games have a loop that looks something like this. Some libraries, like cocos2d that I mentioned earlier
@@ -101,4 +63,39 @@ something from the outside happens, like keyboard input or the game getting a cl
 'event' is added to a list of things that have happned. When we are ready to deal with those events in
 our game, we will write the following code.
 
+As you can see, when we run the program this time, we can use my keyboard shortcut for closing windows and 
+the program exits. We will get back to this event loop later on
+
+
+#Drawing something on the screen
+Now that we have a window set up, we will want to draw something on it. Most of the time you will want to
+draw an image. Images when drawn by game engines are usually known as `sprites`. Some engines separate the
+actual image from the sprite, but that's not the case in sdl. 
+
+The renderer object contains a function called `load_sprite` that takes an image from a folder called
+`resources`, loads it into memory and prepares it for drawing. The function returns an image 'variable' 
+which you need to keep track of. 
+
+In the `resources` folder, I have an ugly image called `ghost.png` which we want to draw. To do that,
+we first call `sprite = renderer.load("ghost.png")`. Then in our main loop, before we run `renderer.present()`,
+we call `renderer.draw_sprite(sprite)`.  When we run the program, we get a small ghost in the upper left of
+the image. 
+
+We can make the image bigger by using `sprite.scale` and we can change the location of it using 
+`sprite.position`. 
+
+THere, with those changes it's much better.
+
+
+We can also rotate sprites using sprite.angle
+
+
+#A quick look at classes
+Those of you who are on the first year of the D and U programmes will not come across propper object orientation
+until this spring but OOP contains one really usefull concept, classes.
+
+In its simplest form, a class is simply a collection of data and functions to perform on that data. We will
+ignore the functions for now and just focus on the data. 
+
+In order to create a class, we use the class keyword
 
