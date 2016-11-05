@@ -29,32 +29,20 @@ def main():
     image = pygame.image.load("resources/ghost.png")
     background = pygame.image.load("resources/background.png")
 
-    keys_pressed = {}
-
-    position = 500
+    angle = 0
     running = True
     while running:
         screen.blit(background, (0, 0))
 
-        draw_translated_image(image, screen, (position, 400), (200, 200), 0)
+        draw_translated_image(image, screen, (100, 100), (200, 200), angle)
+        angle += 0.5
 
         pygame.display.flip()
 
-        if pygame.K_LEFT in keys_pressed:
-            position -= 1
-        elif pygame.K_RIGHT in keys_pressed:
-            position += 1
-
         #Loop through the list of events
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                keys_pressed[event.key] = True
-            elif event.type == pygame.KEYUP:
-                if event.key in keys_pressed:
-                    del keys_pressed[event.key]
-
-            #Other events...
-            if event.type == pygame.QUIT:
+            #If the event tells us that the user has tried to close the window
+            if event.type == pygame.QUIT: 
                 running = False
 
 

@@ -13,7 +13,6 @@ def main():
     screen = pygame.display.set_mode(WINDOW_SIZE)
 
 
-
 main()
 
 

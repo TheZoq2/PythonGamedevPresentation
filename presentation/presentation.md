@@ -16,9 +16,13 @@ theme: cleaver-light
 
 - Input
 
-- Sounds?
+- Sounds
 
-- High scores?
+
+
+- High scores
+
+- Networking
 
 
 
@@ -213,3 +217,78 @@ def draw_translated_image(image, screen, position, scale, rotation):
 
     screen.blit(rotated, (position[0] - offset_x, position[1] - offset_y))
 ```
+
+
+---
+#Input
+
+---
+
+###Events, again
+Some events we can listen for. More events in [documentation](http://www.pygame.org/docs/ref/event.html)
+```
+| Type            | Data              |
+|-----------------+-------------------|
+| QUIT            | none              |
+| KEYDOWN         | unicode, key, mod |
+| KEYUP           | key, mod          |
+| MOUSEMOTION     | pos, rel, buttons |
+| MOUSEBUTTONUP   | pos, button       |
+| MOUSEBUTTONDOWN | pos, button       |
+| JOYAXISMOTION   | joy, axis, value  |
+| JOYBALLMOTION   | joy, ball, rel    |
+```
+
+Getting the data
+```python
+#Check the event
+if event.type == KEYDOWN
+	#use event.<data> to get the data
+	print(event.key)
+```
+
+
+
+---
+###Keyboard input
+To avoid having to use numbers, use the constants found at http://www.pygame.org/docs/ref/key.html
+
+Moving our sprite with the keyboard
+```python
+#Same code as we had before
+if event.type == pygame.KEYDOWN:
+	if event.key == pygame.K_RIGHT:
+		position += 1
+	elif event.key == pygame.K_LEFT:
+		position -= 1
+```
+
+
+---
+###Continuous movement
+Pygame sends events for key presses and releases. We want 'keys held'
+
+```python
+#Create a dictionary to hold the current keys
+keys_pressed = {}
+
+#Main game loop
+    while running:
+		#Graphics stuff
+
+        if pygame.K_LEFT in keys_pressed:
+            position -= 1
+        elif pygame.K_RIGHT in keys_pressed:
+            position += 1
+
+        #Loop through the list of events
+        for event in pygame.event.get():
+            #If the event tells us that the user has tried to close the window
+            if event.type == pygame.KEYDOWN:
+                keys_pressed[event.key] = True
+            elif event.type == pygame.KEYUP:
+                if event.key in keys_pressed:
+                    del keys_pressed[event.key]
+
+```
+

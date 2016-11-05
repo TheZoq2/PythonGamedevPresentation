@@ -379,9 +379,13 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 </li>
 <li><p>Input</p>
 </li>
-<li><p>Sounds?</p>
+<li><p>Sounds</p>
 </li>
-<li><p>High scores?</p>
+</ul>
+<ul>
+<li><p>High scores</p>
+</li>
+<li><p>Networking</p>
 </li>
 </ul>
 </section>
@@ -534,6 +538,67 @@ running = <span class="hljs-keyword">False</span>
     (offset_x, offset_y) = (rotated.get_width() / <span class="hljs-number">2</span>, rotated.get_height() / <span class="hljs-number">2</span>)
 
     screen.blit(rotated, (position[<span class="hljs-number">0</span>] - offset_x, position[<span class="hljs-number">1</span>] - offset_y))</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-17">
+    <section class="slide-content"><h1 id="input">Input</h1>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-18">
+    <section class="slide-content"><h3 id="events-again">Events, again</h3>
+<p>Some events we can listen for. More events in <a href="http://www.pygame.org/docs/ref/event.html">documentation</a></p>
+<pre><code>| Type            | Data              |
+|-----------------+-------------------|
+| QUIT            | none              |
+| KEYDOWN         | unicode, key, mod |
+| KEYUP           | key, mod          |
+| MOUSEMOTION     | pos, rel, buttons |
+| MOUSEBUTTONUP   | pos, button       |
+| MOUSEBUTTONDOWN | pos, button       |
+| JOYAXISMOTION   | joy, axis, value  |
+| JOYBALLMOTION   | joy, ball, rel    |</code></pre>
+<p>Getting the data</p>
+<pre><code class="lang-python"><span class="hljs-comment">#Check the event</span>
+<span class="hljs-keyword">if</span> event.type == KEYDOWN
+    <span class="hljs-comment">#use event.&lt;data&gt; to get the data</span>
+    print(event.key)</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-19">
+    <section class="slide-content"><h3 id="keyboard-input">Keyboard input</h3>
+<p>To avoid having to use numbers, use the constants found at <a href="http://www.pygame.org/docs/ref/key.html">http://www.pygame.org/docs/ref/key.html</a></p>
+<p>Moving our sprite with the keyboard</p>
+<pre><code class="lang-python"><span class="hljs-comment">#Same code as we had before</span>
+<span class="hljs-keyword">if</span> event.type == pygame.KEYDOWN:
+    <span class="hljs-keyword">if</span> event.key == pygame.K_RIGHT:
+        position += <span class="hljs-number">1</span>
+    <span class="hljs-keyword">elif</span> event.key == pygame.K_LEFT:
+        position -= <span class="hljs-number">1</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-20">
+    <section class="slide-content"><h3 id="continuous-movement">Continuous movement</h3>
+<p>Pygame sends events for key presses and releases. We want &#39;keys held&#39;</p>
+<pre><code class="lang-python"><span class="hljs-comment">#Create a dictionary to hold the current keys</span>
+keys_pressed = {}
+
+<span class="hljs-comment">#Main game loop</span>
+    <span class="hljs-keyword">while</span> running:
+        <span class="hljs-comment">#Graphics stuff</span>
+
+        <span class="hljs-keyword">if</span> pygame.K_LEFT <span class="hljs-keyword">in</span> keys_pressed:
+            position -= <span class="hljs-number">1</span>
+        <span class="hljs-keyword">elif</span> pygame.K_RIGHT <span class="hljs-keyword">in</span> keys_pressed:
+            position += <span class="hljs-number">1</span>
+
+        <span class="hljs-comment">#Loop through the list of events</span>
+        <span class="hljs-keyword">for</span> event <span class="hljs-keyword">in</span> pygame.event.get():
+            <span class="hljs-comment">#If the event tells us that the user has tried to close the window</span>
+            <span class="hljs-keyword">if</span> event.type == pygame.KEYDOWN:
+                keys_pressed[event.key] = <span class="hljs-keyword">True</span>
+            <span class="hljs-keyword">elif</span> event.type == pygame.KEYUP:
+                <span class="hljs-keyword">if</span> event.key <span class="hljs-keyword">in</span> keys_pressed:
+                    <span class="hljs-keyword">del</span> keys_pressed[event.key]</code></pre>
 </section>
   </div>
 
