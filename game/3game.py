@@ -22,6 +22,7 @@ def main():
     while running:
         screen.blit(image, image.get_rect())
 
+        pygame.display.flip()
 
         #Loop through the list of events
         for event in pygame.event.get():

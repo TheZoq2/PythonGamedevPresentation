@@ -34,7 +34,7 @@ def main():
     while running:
         screen.blit(background, (0, 0))
 
-        draw_translated_image(image, screen, (100, 100), (200, 200), angle)
+        draw_translated_image(image, screen, (100, 100), (300, 300), angle)
         angle += 0.5
 
         pygame.display.flip()

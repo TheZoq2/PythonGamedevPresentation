@@ -292,3 +292,121 @@ keys_pressed = {}
 
 ```
 
+
+
+
+
+
+
+
+
+---
+
+#Code structure
+
+---
+
+###Split into functions
+
+```python
+
+def main():
+	init()
+
+	while running:
+		do_game_logic(...)
+
+		draw_game(...)
+
+		handle_input(...)
+```
+
+
+
+---
+
+###Passing around data
+```python
+while running:
+	#This isn't viable
+	do_game_logic(player_pos, enemies, bullets, score, ...)
+
+	draw_game(player_pos, enemies, bullets, score, screen, player_image, enemy_image, ...)
+```
+
+We need a better way of storing and passing our data around
+
+```python
+assets = load_assets()
+game_state = init()
+while running:
+	do_game_logic(game_state)
+
+	draw_game(game_state, assets)
+	...
+```
+
+---
+
+
+###A decent solution
+
+
+Store the data in a dictionary
+```python
+game_state = {
+	"player_pos": (100, 100),
+	"player_health": 100,
+
+	"enemy_positions": [(200, 300), (100, 50)],
+	"enemy_health": [50, 75],
+	"enemy_velocity": [(5,0), (3,0)]
+	...
+}
+```
+
+One problem:
+```python
+def remove_enemy(game_state, index):
+	game_state["enemy_positions"].remove(index)
+	game_state["enemy_health"].remove(index)
+	game_state["enemy_velocity"].remove(index)
+	...
+	#What happens if we add more data?
+```
+
+
+
+
+---
+###A better solution:
+
+```python
+game_state = {
+	"player": {
+		"position": (100, 100),
+		"health": 100
+	},
+
+	"enemies": [
+		{
+			"position": (300, 200),
+			"velocity": (5, 0),
+			"health": 50
+		}
+		...
+	]
+}
+```
+
+Addition and removal now looks like this
+```python
+def add_enemy(game_state, position, velocity, health):
+	game_state["enemies"].append({"position": position, "health": health, "velocity": velocity})
+
+
+def remove_enemy(game_state, index):
+	game_state["enemies"].remove(index)
+```
+
+

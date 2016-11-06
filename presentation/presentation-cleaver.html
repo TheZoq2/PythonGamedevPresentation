@@ -601,6 +601,88 @@ keys_pressed = {}
                     <span class="hljs-keyword">del</span> keys_pressed[event.key]</code></pre>
 </section>
   </div>
+  <div class="slide hidden -" id="slide-21">
+    <section class="slide-content"><h1 id="code-structure">Code structure</h1>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-22">
+    <section class="slide-content"><h3 id="split-into-functions">Split into functions</h3>
+<pre><code class="lang-python">
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    init()
+
+    <span class="hljs-keyword">while</span> running:
+        do_game_logic(...)
+
+        draw_game(...)
+
+        handle_input(...)</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-23">
+    <section class="slide-content"><h3 id="passing-around-data">Passing around data</h3>
+<pre><code class="lang-python"><span class="hljs-keyword">while</span> running:
+    <span class="hljs-comment">#This isn't viable</span>
+    do_game_logic(player_pos, enemies, bullets, score, ...)
+
+    draw_game(player_pos, enemies, bullets, score, screen, player_image, enemy_image, ...)</code></pre>
+<p>We need a better way of storing and passing our data around</p>
+<pre><code class="lang-python">assets = load_assets()
+game_state = init()
+<span class="hljs-keyword">while</span> running:
+    do_game_logic(game_state)
+
+    draw_game(game_state, assets)
+    ...</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-24">
+    <section class="slide-content"><h3 id="a-decent-solution">A decent solution</h3>
+<p>Store the data in a dictionary</p>
+<pre><code class="lang-python">game_state = {
+    <span class="hljs-string">"player_pos"</span>: (<span class="hljs-number">100</span>, <span class="hljs-number">100</span>),
+    <span class="hljs-string">"player_health"</span>: <span class="hljs-number">100</span>,
+
+    <span class="hljs-string">"enemy_positions"</span>: [(<span class="hljs-number">200</span>, <span class="hljs-number">300</span>), (<span class="hljs-number">100</span>, <span class="hljs-number">50</span>)],
+    <span class="hljs-string">"enemy_health"</span>: [<span class="hljs-number">50</span>, <span class="hljs-number">75</span>],
+    <span class="hljs-string">"enemy_velocity"</span>: [(<span class="hljs-number">5</span>,<span class="hljs-number">0</span>), (<span class="hljs-number">3</span>,<span class="hljs-number">0</span>)]
+    ...
+}</code></pre>
+<p>One problem:</p>
+<pre><code class="lang-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">remove_enemy</span><span class="hljs-params">(game_state, index)</span>:</span>
+    game_state[<span class="hljs-string">"enemy_positions"</span>].remove(index)
+    game_state[<span class="hljs-string">"enemy_health"</span>].remove(index)
+    game_state[<span class="hljs-string">"enemy_velocity"</span>].remove(index)
+    ...
+    <span class="hljs-comment">#What happens if we add more data?</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-25">
+    <section class="slide-content"><h3 id="a-better-solution-">A better solution:</h3>
+<pre><code class="lang-python">game_state = {
+    <span class="hljs-string">"player"</span>: {
+        <span class="hljs-string">"position"</span>: (<span class="hljs-number">100</span>, <span class="hljs-number">100</span>),
+        <span class="hljs-string">"health"</span>: <span class="hljs-number">100</span>
+    },
+
+    <span class="hljs-string">"enemies"</span>: [
+        {
+            <span class="hljs-string">"position"</span>: (<span class="hljs-number">300</span>, <span class="hljs-number">200</span>),
+            <span class="hljs-string">"velocity"</span>: (<span class="hljs-number">5</span>, <span class="hljs-number">0</span>),
+            <span class="hljs-string">"health"</span>: <span class="hljs-number">50</span>
+        }
+        ...
+    ]
+}</code></pre>
+<p>Addition and removal now looks like this</p>
+<pre><code class="lang-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">add_enemy</span><span class="hljs-params">(game_state, position, velocity, health)</span>:</span>
+    game_state[<span class="hljs-string">"enemies"</span>].append({<span class="hljs-string">"position"</span>: position, <span class="hljs-string">"health"</span>: health, <span class="hljs-string">"velocity"</span>: velocity})
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">remove_enemy</span><span class="hljs-params">(game_state, index)</span>:</span>
+    game_state[<span class="hljs-string">"enemies"</span>].remove(index)</code></pre>
+</section>
+  </div>
 
   <div class="controls">
     <div class="arrow prev"></div>
