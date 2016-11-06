@@ -242,7 +242,7 @@ Some events we can listen for. More events in [documentation](http://www.pygame.
 Getting the data
 ```python
 #Check the event
-if event.type == KEYDOWN
+if event.type == pygame.KEYDOWN
 	#use event.<data> to get the data
 	print(event.key)
 ```
