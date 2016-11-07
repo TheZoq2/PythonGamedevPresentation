@@ -375,12 +375,13 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   <div class="slide hidden -" id="slide-2">
     <section class="slide-content"><h3 id="components-of-a-game">Components of a game</h3>
 <ul>
-<li><p>Graphics</p>
-</li>
 <li><p>Input</p>
 </li>
-<li><p>Sounds</p>
+<li><p>Graphics</p>
 </li>
+</ul>
+<ul>
+<li>Sounds</li>
 </ul>
 <ul>
 <li><p>High scores</p>
@@ -423,8 +424,20 @@ main()</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-5">
+    <section class="slide-content"><h1 id="events">Events</h1>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-6">
     <section class="slide-content"><h3 id="events">Events</h3>
-<p>Events are sent to the window from the outside world</p>
+<pre><code class="lang-python">
+
+<span class="hljs-keyword">for</span> event <span class="hljs-keyword">in</span> pygame.event.get():
+    <span class="hljs-keyword">if</span> event.type == pygame.QUIT:
+        <span class="hljs-comment">#The user wants to close the window</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-7">
+    <section class="slide-content"><h3 id="events">Events</h3>
 <pre><code class="lang-python">running = <span class="hljs-keyword">True</span> <span class="hljs-comment">#True as long as the game should be running</span>
 <span class="hljs-keyword">while</span> running:
     <span class="hljs-keyword">for</span> event <span class="hljs-keyword">in</span> pygame.event.get():
@@ -432,28 +445,37 @@ main()</code></pre>
             running = <span class="hljs-keyword">False</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-6">
-    <section class="slide-content"><h3 id="draw-something">Draw something</h3>
+  <div class="slide hidden -" id="slide-8">
+    <section class="slide-content"><h1 id="graphcs">Graphcs</h1>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-9">
+    <section class="slide-content"><h3 id="draw-images">Draw images</h3>
 <p>Load an image</p>
 <pre><code class="lang-python">image = pygame.image.load(<span class="hljs-string">"path/to/image"</span>)</code></pre>
 <p>Drawing the image to our window</p>
-<pre><code class="lang-python">screen.blit(image, image.get_rect())</code></pre>
+<pre><code class="lang-python">screen.blit(image, (<span class="hljs-number">0</span>,<span class="hljs-number">0</span>))</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-7">
+  <div class="slide hidden -" id="slide-10">
     <section class="slide-content"><h3 id="in-our-code">In our code</h3>
 <pre><code class="lang-python">image = pygame.image.load(<span class="hljs-string">"resources/ghost.png"</span>)
 
 running = <span class="hljs-keyword">True</span>
 <span class="hljs-keyword">while</span> running:
-    screen.blit(image, image.get_rect())
+    screen.blit(image, (<span class="hljs-number">0</span>,<span class="hljs-number">0</span>))
 
 ...</code></pre>
-<p>Showing what we drew</p>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-11">
+    <section class="slide-content"><h3 id="showing-what-we-drew">Showing what we drew</h3>
+<p>Drawing is done to a buffer.</p>
+<p>In order to send that buffer to the screen, we use this:</p>
 <pre><code class="lang-python">pygame.display.flip()</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-8">
+  <div class="slide hidden -" id="slide-12">
     <section class="slide-content"><h3 id="changing-the-image">Changing the image</h3>
 <h4 id="position-is-changed-by-the-blit-function">Position is changed by the <code>blit</code> function</h4>
 <pre><code class="lang-python">screen.blit(image, (x, y))</code></pre>
@@ -465,7 +487,7 @@ new_image = pygame.transform.scale(original, new_resolution)</code></pre>
 <pre><code class="lang-python">new_image = pygame.transform.rotate(original, new_angle)</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-9">
+  <div class="slide hidden -" id="slide-13">
     <section class="slide-content"><h3 id="continuous-movement">Continuous movement</h3>
 <pre><code class="lang-python">position = <span class="hljs-number">0</span>
 running = <span class="hljs-keyword">False</span>
@@ -475,7 +497,7 @@ running = <span class="hljs-keyword">False</span>
     ...</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-10">
+  <div class="slide hidden -" id="slide-14">
     <section class="slide-content"><h3 id="easiest-way-to-refresh-the-sceeen">Easiest way to refresh the sceeen</h3>
 <p>Redraw the background each frame</p>
 <pre><code class="lang-python">background = pygame.image.load(<span class="hljs-string">"resources/background.png"</span>)
@@ -489,7 +511,7 @@ running = <span class="hljs-keyword">False</span>
     ...</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-11">
+  <div class="slide hidden -" id="slide-15">
     <section class="slide-content"><h3 id="rotation-och-pygame">Rotation och pygame</h3>
 <p>Same code as position but for rotation</p>
 <pre><code class="lang-python">angle = <span class="hljs-number">0</span>
@@ -503,31 +525,31 @@ running = <span class="hljs-keyword">False</span>
     ...</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-12">
+  <div class="slide hidden -" id="slide-16">
     <section class="slide-content"><h3 id="rotation-and-pygame">Rotation and pygame</h3>
 <p>We want to rotate this image</p>
 <p><img src="img/rotation1.svg" alt="Rotation 1"></p>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-13">
+  <div class="slide hidden -" id="slide-17">
     <section class="slide-content"><h3 id="rotation-and-pygame">Rotation and pygame</h3>
 <p>Pygame wants a new image</p>
 <p><img src="img/rotation2.svg" alt="Rotation 2"></p>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-14">
+  <div class="slide hidden -" id="slide-18">
     <section class="slide-content"><h3 id="rotation-and-pygame">Rotation and pygame</h3>
 <p>Negative pixels are not allowed</p>
 <p><img src="img/rotation3.svg" alt="Rotation 3"></p>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-15">
+  <div class="slide hidden -" id="slide-19">
     <section class="slide-content"><h3 id="rotation-and-pygame">Rotation and pygame</h3>
 <p>Original image</p>
 <p><img src="img/rotation1.svg" alt="Rotation 4"></p>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-16">
+  <div class="slide hidden -" id="slide-20">
     <section class="slide-content"><h3 id="rotation-around-center">Rotation around center</h3>
 <pre><code class="lang-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">draw_translated_image</span><span class="hljs-params">(image, screen, position, scale, rotation)</span>:</span>
     <span class="hljs-comment">#Apply the rotation and scale we want</span>
@@ -540,11 +562,11 @@ running = <span class="hljs-keyword">False</span>
     screen.blit(rotated, (position[<span class="hljs-number">0</span>] - offset_x, position[<span class="hljs-number">1</span>] - offset_y))</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-17">
+  <div class="slide hidden -" id="slide-21">
     <section class="slide-content"><h1 id="input">Input</h1>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-18">
+  <div class="slide hidden -" id="slide-22">
     <section class="slide-content"><h3 id="events-again">Events, again</h3>
 <p>Some events we can listen for. More events in <a href="http://www.pygame.org/docs/ref/event.html">documentation</a></p>
 <pre><code>| Type            | Data              |
@@ -564,7 +586,7 @@ running = <span class="hljs-keyword">False</span>
     print(event.key)</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-19">
+  <div class="slide hidden -" id="slide-23">
     <section class="slide-content"><h3 id="keyboard-input">Keyboard input</h3>
 <p>To avoid having to use numbers, use the constants found at <a href="http://www.pygame.org/docs/ref/key.html">http://www.pygame.org/docs/ref/key.html</a></p>
 <p>Moving our sprite with the keyboard</p>
@@ -576,7 +598,7 @@ running = <span class="hljs-keyword">False</span>
         position -= <span class="hljs-number">1</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-20">
+  <div class="slide hidden -" id="slide-24">
     <section class="slide-content"><h3 id="continuous-movement">Continuous movement</h3>
 <p>Pygame sends events for key presses and releases. We want &#39;keys held&#39;</p>
 <pre><code class="lang-python"><span class="hljs-comment">#Create a dictionary to hold the current keys</span>
@@ -601,11 +623,11 @@ keys_pressed = {}
                     <span class="hljs-keyword">del</span> keys_pressed[event.key]</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-21">
+  <div class="slide hidden -" id="slide-25">
     <section class="slide-content"><h1 id="code-structure">Code structure</h1>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-22">
+  <div class="slide hidden -" id="slide-26">
     <section class="slide-content"><h3 id="split-into-functions">Split into functions</h3>
 <pre><code class="lang-python">
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
@@ -619,7 +641,7 @@ keys_pressed = {}
         handle_input(...)</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-23">
+  <div class="slide hidden -" id="slide-27">
     <section class="slide-content"><h3 id="passing-around-data">Passing around data</h3>
 <pre><code class="lang-python"><span class="hljs-keyword">while</span> running:
     <span class="hljs-comment">#This isn't viable</span>
@@ -636,7 +658,7 @@ game_state = init()
     ...</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-24">
+  <div class="slide hidden -" id="slide-28">
     <section class="slide-content"><h3 id="a-decent-solution">A decent solution</h3>
 <p>Store the data in a dictionary</p>
 <pre><code class="lang-python">game_state = {
@@ -657,7 +679,7 @@ game_state = init()
     <span class="hljs-comment">#What happens if we add more data?</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-25">
+  <div class="slide hidden -" id="slide-29">
     <section class="slide-content"><h3 id="a-better-solution-">A better solution:</h3>
 <pre><code class="lang-python">game_state = {
     <span class="hljs-string">"player"</span>: {

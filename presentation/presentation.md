@@ -12,9 +12,13 @@ theme: cleaver-light
 
 ###Components of a game
 
-- Graphics
 
 - Input
+
+- Graphics
+
+
+
 
 - Sounds
 
@@ -63,9 +67,25 @@ def main():
 main()
 ```
 
+
+
+
+
+---
+#Events
+
 ---
 ###Events
-Events are sent to the window from the outside world
+```python
+
+
+for event in pygame.event.get():
+	if event.type == pygame.QUIT:
+		#The user wants to close the window
+```
+
+---
+###Events
 
 ```python
 running = True #True as long as the game should be running
@@ -76,8 +96,15 @@ while running:
 ```
 
 
+
+
 ---
-###Draw something
+
+#Graphcs
+
+
+---
+###Draw images
 Load an image
 ```python
 image = pygame.image.load("path/to/image")
@@ -85,7 +112,7 @@ image = pygame.image.load("path/to/image")
 
 Drawing the image to our window
 ```python
-screen.blit(image, image.get_rect())
+screen.blit(image, (0,0))
 ```
 ---
 ###In our code
@@ -94,12 +121,18 @@ image = pygame.image.load("resources/ghost.png")
 
 running = True
 while running:
-	screen.blit(image, image.get_rect())
+	screen.blit(image, (0,0))
 
 ...
 ```
 
-Showing what we drew
+
+---
+###Showing what we drew
+Drawing is done to a buffer.
+
+In order to send that buffer to the screen, we use this:
+
 ```python
 pygame.display.flip()
 ```
