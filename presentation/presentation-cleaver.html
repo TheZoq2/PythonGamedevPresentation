@@ -606,7 +606,7 @@ running = <span class="hljs-keyword">False</span>
     <section class="slide-content"><h3 id="continuous-movement">Continuous movement</h3>
 <p>Pygame sends events for key presses and releases. We want &#39;keys held&#39;</p>
 <pre><code class="lang-python"><span class="hljs-comment">#Create a dictionary to hold the current keys</span>
-set = {}
+keys_pressed = set()
 
 <span class="hljs-comment">#Main game loop</span>
     <span class="hljs-keyword">while</span> running:
@@ -702,7 +702,7 @@ game_state = init()
 }</code></pre>
 <p>Addition and removal now looks like this</p>
 <pre><code class="lang-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">add_enemy</span><span class="hljs-params">(game_state, position, velocity, health)</span>:</span>
-    game_state[<span class="hljs-string">"enemies"</span>].append({<span class="hljs-string">"position"</span>: position, <span class="hljs-string">"health"</span>: health, <span class="hljs-string">"velocity"</span>: velocity})
+    game_state[<span class="hljs-string">"enemies"</span>].append(create_new_enemy(health, position))
 
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">remove_enemy</span><span class="hljs-params">(game_state, index)</span>:</span>

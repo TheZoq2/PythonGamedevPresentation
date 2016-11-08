@@ -309,7 +309,7 @@ Pygame sends events for key presses and releases. We want 'keys held'
 
 ```python
 #Create a dictionary to hold the current keys
-set = {}
+keys_pressed = set()
 
 #Main game loop
     while running:
@@ -442,7 +442,7 @@ game_state = {
 Addition and removal now looks like this
 ```python
 def add_enemy(game_state, position, velocity, health):
-	game_state["enemies"].append({"position": position, "health": health, "velocity": velocity})
+	game_state["enemies"].append(create_new_enemy(health, position))
 
 
 def remove_enemy(game_state, index):
@@ -500,4 +500,3 @@ found here
 
 https://github.com/TheZoq2/PythonGamedevPresentation
 
-Enjoy the gamejam!

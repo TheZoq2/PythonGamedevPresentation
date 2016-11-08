@@ -22,7 +22,7 @@ def main():
     running = True
     while running:
         #The original image
-        screen.blit(image, image.get_rect())
+        screen.blit(image, (0,0))
 
         #A moved image
         screen.blit(image, (100, 100))

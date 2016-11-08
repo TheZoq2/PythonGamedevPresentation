@@ -20,7 +20,7 @@ def main():
 
     running = True
     while running:
-        screen.blit(image, image.get_rect())
+        screen.blit(image, (0,0))
 
         pygame.display.flip()
 
