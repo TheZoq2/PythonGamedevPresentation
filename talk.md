@@ -196,3 +196,18 @@ Finally, have fun while making the games. They will probably end up being pretty
 gamejam games are so the focus should be on you having fun while making them. 
 
 
+
+#Installing on the IDA computers
+Unfortunley, the pip version is severely outdated on the IDA computers which makes the process for installing
+pygame a bit trickier. You need to use a tool called virtualenv which manages your python enviroments to install
+an up-to-date version of pip. This also allows you to install pygame locally without *too* much hassle.
+
+The first step is to create a  new virtual enviroment. This is done using the `virtualenv -p python3 <name>`.
+This will create a folder called `<name>` which contains some local copies of programs.
+
+The second step is to activate your new virtual enviroment. Run `source <path/to/venv>` and it will change your
+PATH making your new programs prioritized. If you run pip3 --version, you should see something along the lines
+of `9.x.x ... python3 ...`. If you do, you have installed it propperly and you can do what you normally would.
+
+Each time you open a new terminal, you will need to reactivate the enviroment using the `source` command.
+
