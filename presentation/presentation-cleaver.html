@@ -563,10 +563,14 @@ running = <span class="hljs-keyword">False</span>
 </section>
   </div>
   <div class="slide hidden -" id="slide-21">
-    <section class="slide-content"><h1 id="input">Input</h1>
+    <section class="slide-content"><h1 id="other-engines">Other engines</h1>
 </section>
   </div>
   <div class="slide hidden -" id="slide-22">
+    <section class="slide-content"><h1 id="input">Input</h1>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-23">
     <section class="slide-content"><h3 id="events-again">Events, again</h3>
 <p>Some events we can listen for. More events in <a href="http://www.pygame.org/docs/ref/event.html">documentation</a></p>
 <pre><code>| Type            | Data              |
@@ -586,7 +590,7 @@ running = <span class="hljs-keyword">False</span>
     print(event.key)</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-23">
+  <div class="slide hidden -" id="slide-24">
     <section class="slide-content"><h3 id="keyboard-input">Keyboard input</h3>
 <p>To avoid having to use numbers, use the constants found at <a href="http://www.pygame.org/docs/ref/key.html">http://www.pygame.org/docs/ref/key.html</a></p>
 <p>Moving our sprite with the keyboard</p>
@@ -598,11 +602,11 @@ running = <span class="hljs-keyword">False</span>
         position -= <span class="hljs-number">1</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-24">
+  <div class="slide hidden -" id="slide-25">
     <section class="slide-content"><h3 id="continuous-movement">Continuous movement</h3>
 <p>Pygame sends events for key presses and releases. We want &#39;keys held&#39;</p>
 <pre><code class="lang-python"><span class="hljs-comment">#Create a dictionary to hold the current keys</span>
-keys_pressed = {}
+set = {}
 
 <span class="hljs-comment">#Main game loop</span>
     <span class="hljs-keyword">while</span> running:
@@ -617,17 +621,17 @@ keys_pressed = {}
         <span class="hljs-keyword">for</span> event <span class="hljs-keyword">in</span> pygame.event.get():
             <span class="hljs-comment">#If the event tells us that the user has tried to close the window</span>
             <span class="hljs-keyword">if</span> event.type == pygame.KEYDOWN:
-                keys_pressed[event.key] = <span class="hljs-keyword">True</span>
+                keys_pressed.add(event.key)
             <span class="hljs-keyword">elif</span> event.type == pygame.KEYUP:
                 <span class="hljs-keyword">if</span> event.key <span class="hljs-keyword">in</span> keys_pressed:
-                    <span class="hljs-keyword">del</span> keys_pressed[event.key]</code></pre>
-</section>
-  </div>
-  <div class="slide hidden -" id="slide-25">
-    <section class="slide-content"><h1 id="code-structure">Code structure</h1>
+                    keys_pressed.remove(event.key)</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-26">
+    <section class="slide-content"><h1 id="code-structure">Code structure</h1>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-27">
     <section class="slide-content"><h3 id="split-into-functions">Split into functions</h3>
 <pre><code class="lang-python">
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
@@ -641,7 +645,7 @@ keys_pressed = {}
         handle_input(...)</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-27">
+  <div class="slide hidden -" id="slide-28">
     <section class="slide-content"><h3 id="passing-around-data">Passing around data</h3>
 <pre><code class="lang-python"><span class="hljs-keyword">while</span> running:
     <span class="hljs-comment">#This isn't viable</span>
@@ -658,7 +662,7 @@ game_state = init()
     ...</code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-28">
+  <div class="slide hidden -" id="slide-29">
     <section class="slide-content"><h3 id="a-decent-solution">A decent solution</h3>
 <p>Store the data in a dictionary</p>
 <pre><code class="lang-python">game_state = {
@@ -679,7 +683,7 @@ game_state = init()
     <span class="hljs-comment">#What happens if we add more data?</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden -" id="slide-29">
+  <div class="slide hidden -" id="slide-30">
     <section class="slide-content"><h3 id="a-better-solution-">A better solution:</h3>
 <pre><code class="lang-python">game_state = {
     <span class="hljs-string">"player"</span>: {
@@ -703,6 +707,47 @@ game_state = init()
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">remove_enemy</span><span class="hljs-params">(game_state, index)</span>:</span>
     game_state[<span class="hljs-string">"enemies"</span>].remove(index)</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-31">
+    <section class="slide-content"><h3 id="avoid-code-duplication">Avoid code duplication</h3>
+<pre><code class="lang-python"><span class="hljs-comment">#Enemies have a radius of 30 pixels </span>
+
+<span class="hljs-comment">#In bullet hit detection</span>
+<span class="hljs-keyword">if</span> distance_to_enemy &lt; <span class="hljs-number">30</span>:
+    <span class="hljs-comment">#enemy is hit</span>
+
+<span class="hljs-comment">#In your collision detection</span>
+<span class="hljs-keyword">if</span> wall_to_enemy &lt; <span class="hljs-number">30</span>:
+    <span class="hljs-comment">#enemy collides with wall</span>
+
+<span class="hljs-comment">#In your drawing code</span>
+enemy_image.scale(<span class="hljs-number">30</span>, <span class="hljs-number">30</span>)</code></pre>
+<h3 id="a-much-better-sollution">A much better sollution</h3>
+<pre><code class="lang-python">ENEMY_SIZE = <span class="hljs-number">30</span>
+
+<span class="hljs-comment">#In bullet hit detection</span>
+<span class="hljs-keyword">if</span> distance_to_enemy &lt; ENEMY_SIZE:
+    <span class="hljs-comment">#enemy is hit</span>
+
+<span class="hljs-comment">#In your collision detection</span>
+<span class="hljs-keyword">if</span> wall_to_enemy &lt; ENEMY_SIZE:
+    <span class="hljs-comment">#enemy collides with wall</span>
+
+<span class="hljs-comment">#In your drawing code</span>
+enemy_image.scale(ENEMY_SIZE, ENEMY_SIZE)</code></pre>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-32">
+    <section class="slide-content"><h1 id="some-tips">Some tips</h1>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-33">
+    <section class="slide-content"><h3 id="thanks-for-listeneing">Thanks for listeneing</h3>
+<p>The presentation, code samples and a sample game (if I have time) can be 
+found here </p>
+<p><a href="https://github.com/TheZoq2/PythonGamedevPresentation">https://github.com/TheZoq2/PythonGamedevPresentation</a></p>
+<p>Enjoy the gamejam!</p>
 </section>
   </div>
 

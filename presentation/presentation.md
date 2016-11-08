@@ -252,6 +252,12 @@ def draw_translated_image(image, screen, position, scale, rotation):
 ```
 
 
+
+---
+#Other engines
+
+
+
 ---
 #Input
 
@@ -303,7 +309,7 @@ Pygame sends events for key presses and releases. We want 'keys held'
 
 ```python
 #Create a dictionary to hold the current keys
-keys_pressed = {}
+set = {}
 
 #Main game loop
     while running:
@@ -318,10 +324,10 @@ keys_pressed = {}
         for event in pygame.event.get():
             #If the event tells us that the user has tried to close the window
             if event.type == pygame.KEYDOWN:
-                keys_pressed[event.key] = True
+                keys_pressed.add(event.key)
             elif event.type == pygame.KEYUP:
                 if event.key in keys_pressed:
-                    del keys_pressed[event.key]
+                    keys_pressed.remove(event.key)
 
 ```
 
@@ -432,6 +438,7 @@ game_state = {
 }
 ```
 
+
 Addition and removal now looks like this
 ```python
 def add_enemy(game_state, position, velocity, health):
@@ -443,3 +450,54 @@ def remove_enemy(game_state, index):
 ```
 
 
+
+---
+###Avoid code duplication
+```python
+#Enemies have a radius of 30 pixels 
+
+#In bullet hit detection
+if distance_to_enemy < 30:
+	#enemy is hit
+
+#In your collision detection
+if wall_to_enemy < 30:
+	#enemy collides with wall
+
+#In your drawing code
+enemy_image.scale(30, 30)
+```
+
+
+###A much better sollution
+```python
+ENEMY_SIZE = 30
+
+#In bullet hit detection
+if distance_to_enemy < ENEMY_SIZE:
+	#enemy is hit
+
+#In your collision detection
+if wall_to_enemy < ENEMY_SIZE:
+	#enemy collides with wall
+
+#In your drawing code
+enemy_image.scale(ENEMY_SIZE, ENEMY_SIZE)
+```
+
+---
+
+
+#Some tips
+
+
+---
+
+###Thanks for listeneing
+
+The presentation, code samples and a sample game (if I have time) can be 
+found here 
+
+https://github.com/TheZoq2/PythonGamedevPresentation
+
+Enjoy the gamejam!

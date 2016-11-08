@@ -29,7 +29,7 @@ def main():
     image = pygame.image.load("resources/ghost.png")
     background = pygame.image.load("resources/background.png")
 
-    keys_pressed = {}
+    keys_pressed = set()
 
     position = 500
     running = True
@@ -48,10 +48,10 @@ def main():
         #Loop through the list of events
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                keys_pressed[event.key] = True
+                keys_pressed.add(event.key)
             elif event.type == pygame.KEYUP:
                 if event.key in keys_pressed:
-                    del keys_pressed[event.key]
+                    keys_pressed.remove(event.key)
 
             #Other events...
             if event.type == pygame.QUIT:

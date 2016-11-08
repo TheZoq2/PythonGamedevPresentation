@@ -1,15 +1,7 @@
 #Slide 1:
 
-Welcome to my presentation on making games in python. My name is Frans, I study the third year in the
-D programme and have been making games during my spare time for a couple of years. I have been
-to most of the gamejams since I started here and I have used python for nearly all of them.
+Introduction...
 
-I am also a lab assistant in the introductory python course so some of you might recognise me. 
-
-The goal for today is to show you how to make a game in python and give you enough knowledge to go 
-to the gamejam on friday and be able to make a decent game. The idea is that I will give a ~1 hour 
-presentation on the basics of python game dev followed by a "workshop" where you can try these
-things out and ask questions if they come up. 
 
 #Components of a game
 
@@ -164,10 +156,152 @@ called `sync` or `present`. When we add it to the code, we see our image in the 
 
 
 
+Cool, we can draw an image, but we probably don't want it to just stay in the top left corner. There
+are 3 common thigns you want to manipulate when drawing images and those are position, scale and rotation.
+
+I have briefly covered position already which is quite simple in pygame. All you need to do to change the
+position where your image is drawn is to change the value of the second parameter for the blit function. 
+The value passed to it is a tuple where the elements are the x and y coordinates where you want the
+top left corner of the image to appear.
+
+
+Rotation and scaling are not as simple but still very much doable. In pygame, they are done using
+`pygame.transform` which contains a couple of functions that transform an image. One thing to note 
+about them is that they return a new image and doesn't modify the original. 
+
+Scaling is done by `pygame.transform.scale` which takes a source image and a tuple where the elements 
+are the desired height
+and width of the new image. This differs from most engines where scaling is done by percentage, you tell
+the engine to create an image half the size, not 100x100 pixels.
+
+Rotation is similar to scaling, instead if `.scale`, the function is called `.rotate` which takes an image
+to rotate and an angle (in degrees) to rotate it by.
+
+
+The code in `4game.py` demonstrates how these transforms work. First, the image is drawn normally at (0,0),
+second the same image is drawn at (100, 100), third: the image is rotated by 45 degrees and drawn to the 
+left and finally it is scaled to 400x400 pixels
+
+Note that we can draw the same image twice in the same frame. Drawing using the `blit` or corresponding 
+functions in pygame and a lot of other engines simply copies the pixels from an image to the screen 
+without modifying the image itself.
+
+##Continuous translation
+So far, we have only drawn static things but in a game we probably want things to move. To do that, we 
+add a variable called position that keeps track of where the image is currently. We update that variable
+and draw the image in the current location in each iteration of the loop which should make it move across
+the screen.
+
+
+If we run `5game.py` we notice somethign weird however. The sprite moves along fine but it draws a trail as
+it moves. This is because most game engines don't clear the buffers or windows once they have been drawn.
+In most cases, we will probably draw over it anyway which means that clearing the screen is a waste
+of performance.
+
+Therefore, in order to get rid of the trail we will need to draw something to cover up the old frame and a
+background image is a great way of doing that, atleast if we intend to have a background in the first place.
+
+In our code, we add a background image that is loaded when the program starts, and then drawn first thing
+in the loop. You have to make sure to not do any drawing between the `.flip` function and the background
+being drawn as that will never be shown on the window.
+
+As you can see from `6game.py` this works perfectly and we now have a ghost flying along in the desert.
+
+
+##Rotation and the problem with pygame
+The same thing should work for angles, right?. Of course not since I mention it :). Let's have a look at the
+code in `7game.py`. It is the same as the previous example where the ghost moved across the screen except
+position has been replaced by angle and the translation has been replaced by a rotation. If we run this code
+you will notice that something is off. 
+
+
+<!--Detailing the fix for this issue-->
+
+##Other engines.
+As you might imagine, doing rotation like this is quite tedious and beause of it, and a bunch of other
+factors most engines don't have this issue. Instead, they separate image drawing from image storage by
+using something called sprites. A sprite is an image with a scale, a position and a rotation and those
+3 operations are done at once when drawing instead of trying to create imtermediate images. The reason
+they can do that and pygame can't is partly because they use the GPU to do the heavy lifting while
+pygame does it on the CPU. This also makes pygame fairly slow compared to hardware accelerated engines.
+
+#Input
+
+As I said earlier, input is a very important part of games as it is what sets games apart from things like 
+movies. 
+
+Dealing with input in pygame takes us back to events which I covered briefly for closing the window. As
+I said then, events are a way for pygame to tell us about things that have happened in the outside
+world. Whenever something interesting happens (keyboard/mouse input, window changes or gamepad input),
+those things are put in a list of events. In order to separate them, the event.type variable
+can be checked to find out what actually happened. As you can see from this table, the type of an
+event can be things like `key pressed`, `mouse moved` or `joystick changed`. However, this information
+isn't enough. Usually we want to know *What* key was pressed or *where* the mouse was moved which means
+that the events also contain a bit of data. This data can be accessed by `event.<data>` where data
+is things like .key keypresses or .pos for mouse events.
+
+If we run this code that prints the event.key every time we get the KEYDOWN event, we notice that it
+prints a different number for each keypress.
+
+Let's use this information to make our ghost move using the arrow keys. We will reuse the position 
+changing ghost that we had before but this time we dont' change position over time. Instead we update
+the position when the left and right arrow keys are pressed. To find out what numbers corresponds to the
+arrow keys, we could run the previous program and copy the numbers but that is both bad coding practice
+and tedious. Instead we will use a set of constants defined by pygame which you can find on this link.
+
+Left arrow is called `K_LEFT` and right arrow is called `K_RIGHT` so whenever we get a keydown event and
+that the key corresponds to one of those constants we update the position. 
+
+Let's run `a1game.py`. We notice that it sort of works but the ghost only moves when we press the keys,
+not when we hold them. This is because we only get events when things change, not continuous updates
+as they happen. If we want to make something happen while a key is held, we need to keep track
+of wether or not the key is held ourselves by looking for both KEYDOWN and KEYUP events.
+
+A neat way of doing this is using a datastructure called `set`. A set is a collection of unique items
+where an item can either be part of the set or not. That is perfect for our usecase since it allows
+us to add each key that gets pressed to the set and remove it once it gets released. In order to check
+if the key is held, we simply check if that key exists in the set using the `in` operator.
+
+If we run `a2game.py` we can move our sprite across the screen using the arrow keys.
+
+Mouse and joystick input is quite similar. You either need to keep track of where the mouse was last
+moved to or remember if a button is held or not, you should be able to figgure it out by looking at
+the documentation and perhaps some examples.
+
+#Game structure
+Now that we know how to draw things and how to handle input I want to talk a bit about structuring our code.
+
+Until now, I have put all the code in a single `main()` function but generally you want to split things
+up in smaller chunks to make modifications and collaborations easier. A good general structure for a game
+could be something like this. There are 3 main functions, one that handles what should happen in the game
+each frame like moving enemies or updating score. The second function you want is a function
+to draw the current state of the game and finally you want a function to handle all input. 
+
+Most games contain a bit of data that needs to be passed around. This is things like player position,
+player score, all the enemies and their data. The drawing and input functions need additional parameters
+like a variable containing all the images to draw (remember that we don't want to load that each frame).
+
+As you can see here, this just wouldn't be manageable long term. We need a better sollution.
 
 
 
-<!--TODO: Add a note on other engines-->
+
+##Avoid code reuse.
+As you develop your game, you will realise that you want to change something, perhaps it is the size of
+the enemeies or the speed of your character. Normally, you might write those values as numbers each time
+you use them. For example, `if enemy_distance < 30 / 2: is_hit()` and `enemy_sprite.scale(30, 30)` ... As
+This number, 30 might appear in 10 places around your code after a day of programming and once you realise
+that the enemies should be 40 pixels wide instead, you need to change the 30 in to 40 in all those places.
+
+This is a tedious process that is bound to introduce bugs. You should instead use a constant called 
+`ENEMY_SIZE` that you set to 30. If you have used that constant everywhere, you can simply change the value
+of it every time you want to change the size of an enemy which will be much more robust.
+
+The same thing applies to calculations that you do in lots of places. If you notice yourself writing the same
+calculation 3 or 4 times, break it out into a function. It will save you work when you use the same calculation
+again and you have one place to change it if you notice it's wrong or want to update it.
+
+
 
 
 
@@ -197,6 +331,7 @@ gamejam games are so the focus should be on you having fun while making them.
 
 
 
+
 #Installing on the IDA computers
 Unfortunley, the pip version is severely outdated on the IDA computers which makes the process for installing
 pygame a bit trickier. You need to use a tool called virtualenv which manages your python enviroments to install
@@ -210,4 +345,3 @@ PATH making your new programs prioritized. If you run pip3 --version, you should
 of `9.x.x ... python3 ...`. If you do, you have installed it propperly and you can do what you normally would.
 
 Each time you open a new terminal, you will need to reactivate the enviroment using the `source` command.
-

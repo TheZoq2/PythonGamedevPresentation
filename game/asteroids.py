@@ -33,6 +33,8 @@ def load_assets():
     background_scale = max(WINDOW_SIZE[0], WINDOW_SIZE[1])
     background = pygame.transform.scale(background, (background_scale, background_scale))
 
+    
+
     return {
             "background": background
         }
