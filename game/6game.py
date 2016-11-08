@@ -26,7 +26,7 @@ def main():
 
         screen.blit(image, (position, 100))
 
-        position += 0.1
+        position += 0.2
 
         pygame.display.flip()
 
