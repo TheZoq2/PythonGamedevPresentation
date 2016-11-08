@@ -11,9 +11,6 @@ def main():
     #Creating a window
     WINDOW_SIZE = (1024, 768)
     screen = pygame.display.set_mode(WINDOW_SIZE)
-
-    while True:
-        pass
     
 
 main()

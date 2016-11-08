@@ -22,8 +22,6 @@ def main():
     while running:
         screen.blit(image, (0,0))
 
-        pygame.display.flip()
-
         #Loop through the list of events
         for event in pygame.event.get():
             #If the event tells us that the user has tried to close the window
