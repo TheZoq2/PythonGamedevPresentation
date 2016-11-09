@@ -5,5 +5,7 @@ gamejam.
 A sample game along with all the example code I showed during the presentation
 can be found in `game/asteroids.py`.
 
-The talk itself can be found in the `presentation` folder. The slides are generated
+The slides can be found at https://thezoq2.github.io/PythonGamedevPresentation/index.html
+
+The source for the slides can be found in the `presentation` folder. The slides are generated
 using cleaver which makes slides from markdown.
