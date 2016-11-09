@@ -34,9 +34,7 @@ def calculate_angle_between_points(point1, point2):
     difference_x = point2[0] - point1[0]
     difference_y = -(point2[1] - point1[1])
 
-    print(difference_x, difference_y)
     angle = math.atan2(difference_y, difference_x)
-    print(angle)
 
     return angle
 
@@ -95,8 +93,17 @@ Game functions:
 #Constants
 WINDOW_SIZE = (1024, 768)
 
-SHIP_ACCELERATION = 40
+SHIP_ACCELERATION = 80
 SHIP_SIZE = (48, 48)
+SHOT_SIZE = (16, 16)
+
+#The time in seconds beween shots
+FIRING_RATE = 0.5
+
+BULLET_SPEED = 200
+
+#The time between a bullet being shot and it getting removed
+BULLET_DESPAWN_TIME = 2
 
 def init_player():
     """
@@ -106,7 +113,11 @@ def init_player():
             "position": (WINDOW_SIZE[0] / 2, WINDOW_SIZE[1] / 2),
             "health": 100,
             "speed": (0,0),
-            "angle": 0 #The player angle in radians. Make sure to convert to degrees when drawing with pygame
+            #The player angle in radians. Make sure to convert to degrees when 
+            #drawing with pygame
+            "angle": 0, 
+            #The time in seconds since the last shot 
+            "last_shot_time": 0 
         }
 
 
@@ -125,8 +136,31 @@ def init_gamestate():
             "player": init_player(),
 
             #List of asteroids in the game
-            "asteroids": []
+            "asteroids": [],
+
+            #List of bullets in the game
+            "bullets": []
         }
+
+
+def add_bullet(game_state, position, speed):
+    """
+    Adds a bullet to the game at a certain position and speed
+    """
+    bullet = {
+            "position": position,
+            "speed": speed,
+            "start_time": time.time()
+        }
+
+    game_state["bullets"].append(bullet)
+
+
+def remove_dead_bullets(game_state):
+    despawn_criteria = (lambda bullet: 
+        True if time.time() - bullet["start_time"] > BULLET_DESPAWN_TIME else False)
+
+    game_state["bullets"] = [bullet for bullet in game_state["bullets"] if not despawn_criteria(bullet)]
 
 
 def rotate_player_to_point(player, point):
@@ -152,13 +186,14 @@ def load_assets():
     background_scale = max(WINDOW_SIZE[0], WINDOW_SIZE[1])
     background = pygame.transform.scale(background, (background_scale, background_scale))
 
-    #Loading the ship sprite and making it bigger than the source to make it
-    #pixelated
     ship = pygame.image.load("resources/ship.png")
+
+    bullet = pygame.image.load("resources/shot.png")
 
     return {
             "background": background,
-            "ship": ship
+            "ship": ship,
+            "bullet": bullet
         }
 
 
@@ -177,9 +212,20 @@ def do_game_logic(game_state, delta_t):
     player = game_state["player"]
 
     #Add the current speed of the ship to the position
-    player["position"] = add_2d_tuples(player["position"], multiply_2d_tuple(player["speed"], delta_t))
+    player["position"] = add_2d_tuples(
+                    player["position"],
+                    multiply_2d_tuple(player["speed"],delta_t)
+                )
 
-    pass
+
+    #Updating the position of all the bullets
+    for bullet in game_state["bullets"]:
+        bullet["position"] = add_2d_tuples(
+                bullet["position"],
+                multiply_2d_tuple(bullet["speed"], delta_t)
+            )
+
+    remove_dead_bullets(game_state)
 
 
 def draw_game(game_state, assets, screen):
@@ -189,9 +235,15 @@ def draw_game(game_state, assets, screen):
     #Draw the background
     screen.blit(assets["background"], (0,0))
 
+    #Draw all the bullets
+    #This is done before drawing the ship so they apear under it
+    for bullet in game_state["bullets"]:
+        draw_translated_image(assets["bullet"], screen, bullet["position"], SHOT_SIZE, 0)
+
     #Draw the ship where it is right now
     player = game_state["player"]
     draw_translated_image(assets["ship"], screen, player["position"], SHIP_SIZE, rad_to_deg(player["angle"]))
+
 
     pygame.display.flip()
 
@@ -234,6 +286,18 @@ def handle_events(game_state, keys_pressed, delta_t):
 
         player["speed"] = (old_vel_x + add_vel_x, old_vel_y + add_vel_y)
 
+    #If the player wants to shoot
+    if pygame.K_SPACE in keys_pressed:
+        last_shot = player["last_shot_time"]
+
+        time_since_last_shot = time.time() - last_shot
+
+        if time_since_last_shot > FIRING_RATE:
+            player["last_shot_time"] = time.time()
+            shot_speed = direction_from_angle(player["angle"], BULLET_SPEED)
+            add_bullet(game_state, player["position"], shot_speed)
+
+
 
 def main():
     game_state = init_gamestate()
@@ -258,7 +322,7 @@ def main():
     while game_state["running"]:
         #Calculating the time the last frame took
         new_frame_time = time.time()
-        delta_t = last_frame_time - new_frame_time #The time between the last frame and this frame
+        delta_t = new_frame_time - last_frame_time #The time between the last frame and this frame
         last_frame_time = new_frame_time
         
         do_game_logic(game_state, delta_t)
