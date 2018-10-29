@@ -10,7 +10,7 @@ theme: cleaver-light
 
 ---
 
-###Components of a game
+### Components of a game
 
 
 - Input
@@ -32,7 +32,7 @@ theme: cleaver-light
 
 ---
 
-###Libraries
+### Libraries
 
 - Pygame (What I will show you)
 
@@ -47,7 +47,7 @@ theme: cleaver-light
 
 ---
 
-###Pygame
+### Pygame
 
 Install the library
 ``` Bash
@@ -72,10 +72,11 @@ main()
 
 
 ---
-#Events
+# Events
 
 ---
-###Events
+### Events
+
 ```python
 
 
@@ -85,7 +86,7 @@ for event in pygame.event.get():
 ```
 
 ---
-###Events
+### Events
 
 ```python
 running = True #True as long as the game should be running
@@ -100,11 +101,11 @@ while running:
 
 ---
 
-#Graphcs
+# Graphcs
 
 
 ---
-###Draw images
+### Draw images
 Load an image
 ```python
 image = pygame.image.load("path/to/image")
@@ -114,8 +115,10 @@ Drawing the image to our window
 ```python
 screen.blit(image, (0,0))
 ```
+
 ---
-###In our code
+
+### In our code
 ```python
 image = pygame.image.load("resources/ghost.png")
 
@@ -128,7 +131,7 @@ while running:
 
 
 ---
-###Showing what we drew
+### Showing what we drew
 Drawing is done to a buffer.
 
 In order to send that buffer to the screen, we use this:
@@ -140,13 +143,13 @@ pygame.display.flip()
 ---
 
 
-###Changing the image
-####Position is changed by the `blit` function
+### Changing the image
+#### Position is changed by the `blit` function
 ```python
 screen.blit(image, (x, y))
 ```
 
-####Scale and rotation with `pygame.transform`
+#### Scale and rotation with `pygame.transform`
 
 Scale
 ```python
@@ -162,7 +165,7 @@ new_image = pygame.transform.rotate(original, new_angle)
 
 ---
 
-###Continuous movement
+### Continuous movement
 ```python
 position = 0
 running = False
@@ -174,7 +177,7 @@ while running:
 
 ---
 
-###Easiest way to refresh the sceeen
+### Easiest way to refresh the sceeen
 Redraw the background each frame
 
 ```python
@@ -192,7 +195,7 @@ while True:
 
 ---
 
-###Rotation och pygame
+### Rotation och pygame
 Same code as position but for rotation
 ```python
 angle = 0
@@ -209,35 +212,35 @@ while running:
 
 ---
 
-###Rotation and pygame
+### Rotation and pygame
 We want to rotate this image
 
 ![Rotation 1](img/rotation1.svg)
 
 ---
 
-###Rotation and pygame
+### Rotation and pygame
 Pygame wants a new image
 
 ![Rotation 2](img/rotation2.svg)
 
 
 ---
-###Rotation and pygame
+### Rotation and pygame
 Negative pixels are not allowed
 
 ![Rotation 3](img/rotation3.svg)
 
 ---
 
-###Rotation and pygame
+### Rotation and pygame
 Original image
 
 ![Rotation 4](img/rotation1.svg)
 
 
 ---
-###Rotation around center
+### Rotation around center
 
 ```python
 def draw_translated_image(image, screen, position, scale, rotation):
@@ -254,16 +257,17 @@ def draw_translated_image(image, screen, position, scale, rotation):
 
 
 ---
-#Other engines
+
+# Other engines
 
 
 
 ---
-#Input
+# Input
 
 ---
 
-###Events, again
+### Events, again
 Some events we can listen for. More events in [documentation](http://www.pygame.org/docs/ref/event.html)
 ```
 | Type            | Data              |
@@ -289,12 +293,12 @@ if event.type == pygame.KEYDOWN
 
 
 ---
-###Keyboard input
+### Keyboard input
 To avoid having to use numbers, use the constants found at http://www.pygame.org/docs/ref/key.html
 
 Moving our sprite with the keyboard
 ```python
-#Same code as we had before
+# Same code as we had before
 if event.type == pygame.KEYDOWN:
 	if event.key == pygame.K_RIGHT:
 		position += 1
@@ -304,7 +308,8 @@ if event.type == pygame.KEYDOWN:
 
 
 ---
-###Continuous movement
+
+### Continuous movement
 Pygame sends events for key presses and releases. We want 'keys held'
 
 ```python
@@ -341,11 +346,11 @@ keys_pressed = set()
 
 ---
 
-#Code structure
+# Code structure
 
 ---
 
-###Split into functions
+### Split into functions
 
 ```python
 
@@ -364,7 +369,7 @@ def main():
 
 ---
 
-###Passing around data
+### Passing around data
 ```python
 while running:
 	#This isn't viable
@@ -388,7 +393,7 @@ while running:
 ---
 
 
-###A decent solution
+### A decent solution
 
 
 Store the data in a dictionary
@@ -469,7 +474,7 @@ enemy_image.scale(30, 30)
 ```
 
 
-###A much better sollution
+### A much better sollution
 ```python
 ENEMY_SIZE = 30
 
@@ -488,12 +493,12 @@ enemy_image.scale(ENEMY_SIZE, ENEMY_SIZE)
 ---
 
 
-#Some tips
+# Some tips
 
 
 ---
 
-###Thanks for listeneing
+### Thanks for listeneing
 
 The presentation, code samples and a sample game (if I have time) can be 
 found here 
