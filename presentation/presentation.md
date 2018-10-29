@@ -3,10 +3,10 @@
 theme: cleaver-light
 
 ---
-#Making games in python
+# Making games in python
 
-##Frans skarman
-##2016
+## Frans skarman
+## 2018
 
 ---
 
