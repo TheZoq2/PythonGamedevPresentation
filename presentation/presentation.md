@@ -51,7 +51,7 @@ theme: cleaver-light
 
 Install the library
 ``` Bash
-> pip3 install pygame
+$ pip3 install pygame
 ```
 
 Import it in your project
@@ -101,7 +101,7 @@ while running:
 
 ---
 
-# Graphcs
+# Graphics
 
 
 ---
@@ -195,7 +195,7 @@ while True:
 
 ---
 
-### Rotation och pygame
+### Rotation and pygame
 Same code as position but for rotation
 ```python
 angle = 0
@@ -423,7 +423,7 @@ def remove_enemy(game_state, index):
 
 
 ---
-###A better solution:
+### A better solution:
 
 ```python
 game_state = {
@@ -457,24 +457,29 @@ def remove_enemy(game_state, index):
 
 
 ---
-###Avoid code duplication
-```python
-#Enemies have a radius of 30 pixels 
 
-#In bullet hit detection
+### Avoid code duplication
+
+```python
+# Enemies have a radius of 30 pixels 
+
+# In bullet hit detection
 if distance_to_enemy < 30:
 	#enemy is hit
 
-#In your collision detection
+# In your collision detection
 if wall_to_enemy < 30:
 	#enemy collides with wall
 
-#In your drawing code
+# In your drawing code
 enemy_image.scale(30, 30)
 ```
 
 
+--
+
 ### A much better sollution
+
 ```python
 ENEMY_SIZE = 30
 
@@ -500,8 +505,9 @@ enemy_image.scale(ENEMY_SIZE, ENEMY_SIZE)
 
 ### Thanks for listeneing
 
-The presentation, code samples and a sample game (if I have time) can be 
-found here 
+The presentation, code samples and a sample game can be found on my github
 
 https://github.com/TheZoq2/PythonGamedevPresentation
+
+![https://github.com/TheZoq2/PythonGamedevPresentation](link_qr.gif "https://github.com/TheZoq2/PythonGamedevPresentation")
 
