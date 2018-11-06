@@ -9,14 +9,14 @@
     body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #fff;
-  font-size: 100%;
+  font-size: 85%;
 }
 
 .slide {
   position: absolute;
   top: 0; bottom: 0;
   left: 0; right: 0;
-  background-color: #1c1c1c;
+  background-color: #000;
 }
 
 .slide-content {
@@ -132,8 +132,8 @@ a:hover {
 }
 
 pre {
-  font-size: 60%;
-  line-height: 1.3;
+  font-size: 80%;
+  line-height: 1.2;
 }
 
 .progress {
@@ -272,7 +272,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 .hljs-comment,
 .hljs-quote {
-  color: #3D593F;
+  color: #88E08E;
   font-style: italic;
 }
 
@@ -288,18 +288,18 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 .hljs-variable,
 .hljs-template-variable,
 .hljs-tag .hljs-attr {
-  color: #008080;
+  color: #ffda91;
 }
 
 .hljs-string,
 .hljs-doctag {
-  color: #d14;
+  color: #ffbbbb;
 }
 
 .hljs-title,
 .hljs-section,
 .hljs-selector-id {
-  color: #900;
+  /*color: #900;*/
   font-weight: bold;
 }
 
@@ -327,7 +327,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 .hljs-symbol,
 .hljs-bullet {
-  color: #990073;
+  color: #73ffdc;
 }
 
 .hljs-built_in,
@@ -369,7 +369,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   <div class="slide -" id="slide-1">
     <section class="slide-content"><h1 id="making-games-in-python">Making games in python</h1>
 <h2 id="frans-skarman">Frans skarman</h2>
-<h2 id="2016">2016</h2>
+<h2 id="2018">2018</h2>
 </section>
   </div>
   <div class="slide hidden -" id="slide-2">
@@ -410,7 +410,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   <div class="slide hidden -" id="slide-4">
     <section class="slide-content"><h3 id="pygame">Pygame</h3>
 <p>Install the library</p>
-<pre><code class="lang-Bash">&gt; pip3 install pygame</code></pre>
+<pre><code class="lang-Bash">$ pip3 install pygame
+</code></pre>
 <p>Import it in your project</p>
 <pre><code class="lang-python"><span class="hljs-keyword">import</span> pygame
 
@@ -420,7 +421,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
     WINDOW_SIZE = (<span class="hljs-number">1024</span>, <span class="hljs-number">768</span>)
     screen = pygame.display.set_mode(WINDOW_SIZE)
 
-main()</code></pre>
+main()
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-5">
@@ -433,7 +435,8 @@ main()</code></pre>
 
 <span class="hljs-keyword">for</span> event <span class="hljs-keyword">in</span> pygame.event.get():
     <span class="hljs-keyword">if</span> event.type == pygame.QUIT:
-        <span class="hljs-comment">#The user wants to close the window</span></code></pre>
+        <span class="hljs-comment">#The user wants to close the window</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-7">
@@ -442,19 +445,22 @@ main()</code></pre>
 <span class="hljs-keyword">while</span> running:
     <span class="hljs-keyword">for</span> event <span class="hljs-keyword">in</span> pygame.event.get():
         <span class="hljs-keyword">if</span> event.type == pygame.QUIT:
-            running = <span class="hljs-keyword">False</span></code></pre>
+            running = <span class="hljs-keyword">False</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-8">
-    <section class="slide-content"><h1 id="graphcs">Graphcs</h1>
+    <section class="slide-content"><h1 id="graphics">Graphics</h1>
 </section>
   </div>
   <div class="slide hidden -" id="slide-9">
     <section class="slide-content"><h3 id="draw-images">Draw images</h3>
 <p>Load an image</p>
-<pre><code class="lang-python">image = pygame.image.load(<span class="hljs-string">"path/to/image"</span>)</code></pre>
+<pre><code class="lang-python">image = pygame.image.load(<span class="hljs-string">"path/to/image"</span>)
+</code></pre>
 <p>Drawing the image to our window</p>
-<pre><code class="lang-python">screen.blit(image, (<span class="hljs-number">0</span>,<span class="hljs-number">0</span>))</code></pre>
+<pre><code class="lang-python">screen.blit(image, (<span class="hljs-number">0</span>,<span class="hljs-number">0</span>))
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-10">
@@ -465,26 +471,31 @@ running = <span class="hljs-keyword">True</span>
 <span class="hljs-keyword">while</span> running:
     screen.blit(image, (<span class="hljs-number">0</span>,<span class="hljs-number">0</span>))
 
-...</code></pre>
+...
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-11">
     <section class="slide-content"><h3 id="showing-what-we-drew">Showing what we drew</h3>
 <p>Drawing is done to a buffer.</p>
 <p>In order to send that buffer to the screen, we use this:</p>
-<pre><code class="lang-python">pygame.display.flip()</code></pre>
+<pre><code class="lang-python">pygame.display.flip()
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-12">
     <section class="slide-content"><h3 id="changing-the-image">Changing the image</h3>
 <h4 id="position-is-changed-by-the-blit-function">Position is changed by the <code>blit</code> function</h4>
-<pre><code class="lang-python">screen.blit(image, (x, y))</code></pre>
-<h4 id="scale-and-rotation-with-pygame-transform-">Scale and rotation with <code>pygame.transform</code></h4>
+<pre><code class="lang-python">screen.blit(image, (x, y))
+</code></pre>
+<h4 id="scale-and-rotation-with-pygame-transform">Scale and rotation with <code>pygame.transform</code></h4>
 <p>Scale</p>
 <pre><code class="lang-python">new_resolution = (width, height)
-new_image = pygame.transform.scale(original, new_resolution)</code></pre>
+new_image = pygame.transform.scale(original, new_resolution)
+</code></pre>
 <p>Rotation</p>
-<pre><code class="lang-python">new_image = pygame.transform.rotate(original, new_angle)</code></pre>
+<pre><code class="lang-python">new_image = pygame.transform.rotate(original, new_angle)
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-13">
@@ -494,7 +505,8 @@ running = <span class="hljs-keyword">False</span>
 <span class="hljs-keyword">while</span> running:
     position += <span class="hljs-number">0.1</span>
     screen.blit(image, (position,<span class="hljs-number">100</span>))
-    ...</code></pre>
+    ...
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-14">
@@ -508,11 +520,12 @@ running = <span class="hljs-keyword">False</span>
     image.blit(background, (<span class="hljs-number">0</span>,<span class="hljs-number">0</span>))
 
     draw_rest_of_game()
-    ...</code></pre>
+    ...
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-15">
-    <section class="slide-content"><h3 id="rotation-och-pygame">Rotation och pygame</h3>
+    <section class="slide-content"><h3 id="rotation-and-pygame">Rotation and pygame</h3>
 <p>Same code as position but for rotation</p>
 <pre><code class="lang-python">angle = <span class="hljs-number">0</span>
 running = <span class="hljs-keyword">False</span>
@@ -522,7 +535,8 @@ running = <span class="hljs-keyword">False</span>
     screen.blit(rotated, (<span class="hljs-number">100</span>,<span class="hljs-number">100</span>))
 
     angle += <span class="hljs-number">0.1</span> <span class="hljs-comment">#Increase angle</span>
-    ...</code></pre>
+    ...
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-16">
@@ -559,7 +573,8 @@ running = <span class="hljs-keyword">False</span>
     <span class="hljs-comment">#Calculate the center of the image</span>
     (offset_x, offset_y) = (rotated.get_width() / <span class="hljs-number">2</span>, rotated.get_height() / <span class="hljs-number">2</span>)
 
-    screen.blit(rotated, (position[<span class="hljs-number">0</span>] - offset_x, position[<span class="hljs-number">1</span>] - offset_y))</code></pre>
+    screen.blit(rotated, (position[<span class="hljs-number">0</span>] - offset_x, position[<span class="hljs-number">1</span>] - offset_y))
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-21">
@@ -582,24 +597,26 @@ running = <span class="hljs-keyword">False</span>
 | MOUSEBUTTONUP   | pos, button       |
 | MOUSEBUTTONDOWN | pos, button       |
 | JOYAXISMOTION   | joy, axis, value  |
-| JOYBALLMOTION   | joy, ball, rel    |</code></pre>
-<p>Getting the data</p>
+| JOYBALLMOTION   | joy, ball, rel    |
+</code></pre><p>Getting the data</p>
 <pre><code class="lang-python"><span class="hljs-comment">#Check the event</span>
 <span class="hljs-keyword">if</span> event.type == pygame.KEYDOWN
     <span class="hljs-comment">#use event.&lt;data&gt; to get the data</span>
-    print(event.key)</code></pre>
+    print(event.key)
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-24">
     <section class="slide-content"><h3 id="keyboard-input">Keyboard input</h3>
 <p>To avoid having to use numbers, use the constants found at <a href="http://www.pygame.org/docs/ref/key.html">http://www.pygame.org/docs/ref/key.html</a></p>
 <p>Moving our sprite with the keyboard</p>
-<pre><code class="lang-python"><span class="hljs-comment">#Same code as we had before</span>
+<pre><code class="lang-python"><span class="hljs-comment"># Same code as we had before</span>
 <span class="hljs-keyword">if</span> event.type == pygame.KEYDOWN:
     <span class="hljs-keyword">if</span> event.key == pygame.K_RIGHT:
         position += <span class="hljs-number">1</span>
     <span class="hljs-keyword">elif</span> event.key == pygame.K_LEFT:
-        position -= <span class="hljs-number">1</span></code></pre>
+        position -= <span class="hljs-number">1</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-25">
@@ -624,7 +641,9 @@ keys_pressed = set()
                 keys_pressed.add(event.key)
             <span class="hljs-keyword">elif</span> event.type == pygame.KEYUP:
                 <span class="hljs-keyword">if</span> event.key <span class="hljs-keyword">in</span> keys_pressed:
-                    keys_pressed.remove(event.key)</code></pre>
+                    keys_pressed.remove(event.key)
+
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-26">
@@ -642,7 +661,8 @@ keys_pressed = set()
 
         draw_game(...)
 
-        handle_input(...)</code></pre>
+        handle_input(...)
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-28">
@@ -651,7 +671,8 @@ keys_pressed = set()
     <span class="hljs-comment">#This isn't viable</span>
     do_game_logic(player_pos, enemies, bullets, score, ...)
 
-    draw_game(player_pos, enemies, bullets, score, screen, player_image, enemy_image, ...)</code></pre>
+    draw_game(player_pos, enemies, bullets, score, screen, player_image, enemy_image, ...)
+</code></pre>
 <p>We need a better way of storing and passing our data around</p>
 <pre><code class="lang-python">assets = load_assets()
 game_state = init()
@@ -659,7 +680,8 @@ game_state = init()
     do_game_logic(game_state)
 
     draw_game(game_state, assets)
-    ...</code></pre>
+    ...
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-29">
@@ -673,14 +695,16 @@ game_state = init()
     <span class="hljs-string">"enemy_health"</span>: [<span class="hljs-number">50</span>, <span class="hljs-number">75</span>],
     <span class="hljs-string">"enemy_velocity"</span>: [(<span class="hljs-number">5</span>,<span class="hljs-number">0</span>), (<span class="hljs-number">3</span>,<span class="hljs-number">0</span>)]
     ...
-}</code></pre>
+}
+</code></pre>
 <p>One problem:</p>
 <pre><code class="lang-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">remove_enemy</span><span class="hljs-params">(game_state, index)</span>:</span>
     game_state[<span class="hljs-string">"enemy_positions"</span>].remove(index)
     game_state[<span class="hljs-string">"enemy_health"</span>].remove(index)
     game_state[<span class="hljs-string">"enemy_velocity"</span>].remove(index)
     ...
-    <span class="hljs-comment">#What happens if we add more data?</span></code></pre>
+    <span class="hljs-comment">#What happens if we add more data?</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-30">
@@ -699,31 +723,37 @@ game_state = init()
         }
         ...
     ]
-}</code></pre>
+}
+</code></pre>
 <p>Addition and removal now looks like this</p>
 <pre><code class="lang-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">add_enemy</span><span class="hljs-params">(game_state, position, velocity, health)</span>:</span>
     game_state[<span class="hljs-string">"enemies"</span>].append(create_new_enemy(health, position))
 
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">remove_enemy</span><span class="hljs-params">(game_state, index)</span>:</span>
-    game_state[<span class="hljs-string">"enemies"</span>].remove(index)</code></pre>
+    game_state[<span class="hljs-string">"enemies"</span>].remove(index)
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-31">
     <section class="slide-content"><h3 id="avoid-code-duplication">Avoid code duplication</h3>
-<pre><code class="lang-python"><span class="hljs-comment">#Enemies have a radius of 30 pixels </span>
+<pre><code class="lang-python"><span class="hljs-comment"># Enemies have a radius of 30 pixels </span>
 
-<span class="hljs-comment">#In bullet hit detection</span>
+<span class="hljs-comment"># In bullet hit detection</span>
 <span class="hljs-keyword">if</span> distance_to_enemy &lt; <span class="hljs-number">30</span>:
     <span class="hljs-comment">#enemy is hit</span>
 
-<span class="hljs-comment">#In your collision detection</span>
+<span class="hljs-comment"># In your collision detection</span>
 <span class="hljs-keyword">if</span> wall_to_enemy &lt; <span class="hljs-number">30</span>:
     <span class="hljs-comment">#enemy collides with wall</span>
 
-<span class="hljs-comment">#In your drawing code</span>
-enemy_image.scale(<span class="hljs-number">30</span>, <span class="hljs-number">30</span>)</code></pre>
-<h3 id="a-much-better-sollution">A much better sollution</h3>
+<span class="hljs-comment"># In your drawing code</span>
+enemy_image.scale(<span class="hljs-number">30</span>, <span class="hljs-number">30</span>)
+</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-32">
+    <section class="slide-content"><h3 id="a-much-better-sollution">A much better sollution</h3>
 <pre><code class="lang-python">ENEMY_SIZE = <span class="hljs-number">30</span>
 
 <span class="hljs-comment">#In bullet hit detection</span>
@@ -735,18 +765,19 @@ enemy_image.scale(<span class="hljs-number">30</span>, <span class="hljs-number"
     <span class="hljs-comment">#enemy collides with wall</span>
 
 <span class="hljs-comment">#In your drawing code</span>
-enemy_image.scale(ENEMY_SIZE, ENEMY_SIZE)</code></pre>
-</section>
-  </div>
-  <div class="slide hidden -" id="slide-32">
-    <section class="slide-content"><h1 id="some-tips">Some tips</h1>
+enemy_image.scale(ENEMY_SIZE, ENEMY_SIZE)
+</code></pre>
 </section>
   </div>
   <div class="slide hidden -" id="slide-33">
+    <section class="slide-content"><h1 id="some-tips">Some tips</h1>
+</section>
+  </div>
+  <div class="slide hidden -" id="slide-34">
     <section class="slide-content"><h3 id="thanks-for-listeneing">Thanks for listeneing</h3>
-<p>The presentation, code samples and a sample game (if I have time) can be 
-found here </p>
+<p>The presentation, code samples and a sample game can be found on my github</p>
 <p><a href="https://github.com/TheZoq2/PythonGamedevPresentation">https://github.com/TheZoq2/PythonGamedevPresentation</a></p>
+<p><img src="link_qr.gif" alt="https://github.com/TheZoq2/PythonGamedevPresentation" title="https://github.com/TheZoq2/PythonGamedevPresentation"></p>
 </section>
   </div>
 

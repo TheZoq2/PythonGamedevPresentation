@@ -14,11 +14,11 @@ This should probably be split into more files as there are a lot of functions
 Utility functions:
 """
 def draw_translated_image(image, screen, position, scale, rotation):
-    #Apply the rotation and scale we want
+    # Apply the rotation and scale we want
     scaled = pygame.transform.scale(image, scale)
     rotated = pygame.transform.rotate(scaled, rotation)
 
-    #Calculate the center of the image
+    # Calculate the center of the image
     (offset_x, offset_y) = (rotated.get_width() / 2, rotated.get_height() / 2)
 
     screen.blit(rotated, (position[0] - offset_x, position[1] - offset_y))
@@ -90,20 +90,25 @@ Game functions:
 """
 
 
-#Constants
+# Constants
 WINDOW_SIZE = (1024, 768)
 
 SHIP_ACCELERATION = 80
 SHIP_SIZE = (48, 48)
 SHOT_SIZE = (16, 16)
 
-#The time in seconds beween shots
+# The time in seconds beween shots
 FIRING_RATE = 0.5
 
 BULLET_SPEED = 200
 
-#The time between a bullet being shot and it getting removed
+# The time between a bullet being shot and it getting removed
 BULLET_DESPAWN_TIME = 2
+
+
+ASTEROID_SPAWN_RADIUS = 1200
+ASTEROID_DESPAWN_RADIUS = 1300
+
 
 def init_player():
     """
@@ -113,11 +118,11 @@ def init_player():
             "position": (WINDOW_SIZE[0] / 2, WINDOW_SIZE[1] / 2),
             "health": 100,
             "speed": (0,0),
-            #The player angle in radians. Make sure to convert to degrees when 
-            #drawing with pygame
+            # The player angle in radians. Make sure to convert to degrees when 
+            # drawing with pygame
             "angle": 0, 
-            #The time in seconds since the last shot 
-            "last_shot_time": 0 
+            # The time in seconds since the last shot 
+            "last_shot_time": 0,
         }
 
 
@@ -127,18 +132,18 @@ def init_gamestate():
     """
 
     return {
-            #Set to false when the game should exit
+            # Set to false when the game should exit
             "running": True,
 
-            #The last time an asteroid was spawned
+            # The last time an asteroid was spawned
             "last_asteroid_spawn": 0,
 
             "player": init_player(),
 
-            #List of asteroids in the game
+            # List of asteroids in the game
             "asteroids": [],
 
-            #List of bullets in the game
+            # List of bullets in the game
             "bullets": []
         }
 
@@ -181,7 +186,7 @@ def load_assets():
     Assets, like the gamestate are stored in a dictionary for easy modifcation,
     passing around and lookup
     """
-    #Loading the background and scaling it so it fills the whole window
+    # Loading the background and scaling it so it fills the whole window
     background = pygame.image.load("resources/background.png")
     background_scale = max(WINDOW_SIZE[0], WINDOW_SIZE[1])
     background = pygame.transform.scale(background, (background_scale, background_scale))
@@ -208,17 +213,19 @@ def do_game_logic(game_state, delta_t):
     on slower or faster hardware
     """
 
-    #Updating the player position
+    # Updating the player position
     player = game_state["player"]
 
-    #Add the current speed of the ship to the position
+    # Add the current speed of the ship to the position
     player["position"] = add_2d_tuples(
                     player["position"],
                     multiply_2d_tuple(player["speed"],delta_t)
                 )
 
 
-    #Updating the position of all the bullets
+
+
+    # Updating the position of all the bullets
     for bullet in game_state["bullets"]:
         bullet["position"] = add_2d_tuples(
                 bullet["position"],
@@ -232,15 +239,15 @@ def draw_game(game_state, assets, screen):
     """
     Draws the current gamestate to the screen
     """
-    #Draw the background
+    # Draw the background
     screen.blit(assets["background"], (0,0))
 
-    #Draw all the bullets
-    #This is done before drawing the ship so they apear under it
+    # Draw all the bullets
+    # This is done before drawing the ship so they apear under it
     for bullet in game_state["bullets"]:
         draw_translated_image(assets["bullet"], screen, bullet["position"], SHOT_SIZE, 0)
 
-    #Draw the ship where it is right now
+    # Draw the ship where it is right now
     player = game_state["player"]
     draw_translated_image(assets["ship"], screen, player["position"], SHIP_SIZE, rad_to_deg(player["angle"]))
 
@@ -257,19 +264,19 @@ def handle_events(game_state, keys_pressed, delta_t):
     on slower or faster hardware
     """
 
-    #Getting the player from the gamestate struct since we will modify it a lot here
+    # Getting the player from the gamestate struct since we will modify it a lot here
     player = game_state["player"]
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_state["running"] = False
 
-        #When the mouse is moved, the ship should be pointed towards it
+        # When the mouse is moved, the ship should be pointed towards it
         if event.type == pygame.MOUSEMOTION:
             mouse_pos = event.pos
             rotate_player_to_point(player, mouse_pos)
 
-        #Keeping track of what keys are being held
+        # Keeping track of what keys are being held
         if event.type == pygame.KEYDOWN:
             keys_pressed.add(event.key)
         if event.type == pygame.KEYUP:
@@ -277,16 +284,16 @@ def handle_events(game_state, keys_pressed, delta_t):
                 keys_pressed.remove(event.key)
 
     
-    #Updating keyboard
+    # Updating keyboard
     if pygame.K_w in keys_pressed:
-        #Add some speed in the current direction of the ship
+        # Add some speed in the current direction of the ship
         (old_vel_x, old_vel_y) = player["speed"]
 
         (add_vel_x, add_vel_y) = direction_from_angle(player["angle"], delta_t * SHIP_ACCELERATION)
 
         player["speed"] = (old_vel_x + add_vel_x, old_vel_y + add_vel_y)
 
-    #If the player wants to shoot
+    # If the player wants to shoot
     if pygame.K_SPACE in keys_pressed:
         last_shot = player["last_shot_time"]
 
@@ -310,19 +317,19 @@ def main():
     keys_pressed = set()
 
 
-    #Initialising timer based movement. TBM ensures that things in the game
-    #move at a constant speed that doesn't depend on how fast the game is running
-    #in general.
-    #The idea is to multiply all movement by how long the last iteration of the game loop took
+    # Initialising timer based movement. TBM ensures that things in the game
+    # move at a constant speed that doesn't depend on how fast the game is running
+    # in general.
+    # The idea is to multiply all movement by how long the last iteration of the game loop took
     last_frame_time = time.time()
 
-    #Instead of while running = true, we need to use gamestate
-    #so that handle_events which can't access a running variable
-    #can close the game
+    # Instead of while running = true, we need to use gamestate
+    # so that handle_events which can't access a running variable
+    # can close the game
     while game_state["running"]:
-        #Calculating the time the last frame took
+        # Calculating the time the last frame took
         new_frame_time = time.time()
-        delta_t = new_frame_time - last_frame_time #The time between the last frame and this frame
+        delta_t = new_frame_time - last_frame_time # The time between the last frame and this frame
         last_frame_time = new_frame_time
         
         do_game_logic(game_state, delta_t)
@@ -332,8 +339,8 @@ def main():
         handle_events(game_state, keys_pressed, delta_t)
 
 
-#If the script is run directly (python3 asteroids.py) start the main function, but don't start it
-#if the file is being imported
+# If the script is run directly (python3 asteroids.py) start the main function, but don't start it
+# if the file is being imported
 if __name__ == "__main__":
     main()
 
