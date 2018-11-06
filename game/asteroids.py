@@ -1,6 +1,7 @@
 import pygame
 import math
 import time
+import random
 
 """
 A demo game showing of some of the things I talked about during the presentation.
@@ -80,6 +81,16 @@ def multiply_2d_tuple(tup, val):
 
     return (x * val, y * val)
 
+def sub_2d_tuples(tup1, tup2):
+    (x1, y1) = tup1
+    (x2, y2) = tup2
+    
+    return (x1 - x2, y1 - y2)
+
+
+def tuple_length(tup):
+    (x,y) = tup
+    return math.sqrt(x ** 2 + y ** 2)
 
 
 
@@ -106,8 +117,10 @@ BULLET_SPEED = 200
 BULLET_DESPAWN_TIME = 2
 
 
-ASTEROID_SPAWN_RADIUS = 1200
-ASTEROID_DESPAWN_RADIUS = 1300
+ASTEROID_SPAWN_RADIUS = 650
+ASTEROID_DESPAWN_RADIUS = 700
+ASTEROID_AMOUNT = 10
+ASTEROID_RADIUS = 64
 
 
 def init_player():
@@ -146,6 +159,29 @@ def init_gamestate():
             # List of bullets in the game
             "bullets": []
         }
+
+
+def new_asteroid():
+    """
+    Spawns a new asteroid with a random velocity and a random point outside the screen
+    """
+    center = multiply_2d_tuple(WINDOW_SIZE, 0.5)
+
+    # Generate a random angle
+    angle = random.random() * math.pi * 2
+    # use that angle to generate xy coordinates at ASTEROID_SPAWN_RADIUS
+    # around the center of the screen
+    offset = (math.cos(angle), math.sin(angle))
+    position = add_2d_tuples(center, multiply_2d_tuple(offset, ASTEROID_SPAWN_RADIUS))
+
+    velocity_angle = random.random() * math.pi * 2
+    velocity = (math.cos(velocity_angle), math.sin(velocity_angle))
+
+    return {
+        "position": position,
+        "velocity": velocity
+    }
+
 
 
 def add_bullet(game_state, position, speed):
@@ -195,11 +231,52 @@ def load_assets():
 
     bullet = pygame.image.load("resources/shot.png")
 
+    asteroid = pygame.image.load("resources/asteroid.png")
+
     return {
             "background": background,
             "ship": ship,
-            "bullet": bullet
+            "bullet": bullet,
+            "asteroid": asteroid
         }
+
+
+def asteroid_despawn_condition(asteroid):
+    center = multiply_2d_tuple(WINDOW_SIZE, 0.5)
+    return tuple_length(sub_2d_tuples(asteroid["position"], center)) < ASTEROID_DESPAWN_RADIUS
+
+def update_asteroid(asteroid):
+    asteroid["position"] = add_2d_tuples(asteroid["position"], asteroid["velocity"])
+    return asteroid
+
+
+def manage_asteroids(game_state):
+    # Despawn asteroids that are too far away
+    game_state["asteroids"] = list(filter(asteroid_despawn_condition, game_state["asteroids"]))
+
+    # Update the remaining positions
+    game_state["asteroids"] = list(map(update_asteroid, game_state["asteroids"]))
+
+    asteroids_to_add = ASTEROID_AMOUNT - len(game_state["asteroids"])
+
+    for _ in range(asteroids_to_add):
+        game_state["asteroids"].append(new_asteroid())
+
+
+def do_hit_detection(game_state):
+    """
+    Checks for asteroids<-> bullet collision and remove them accordingly
+
+    TODO: Add score
+    """
+    for asteroid in game_state["asteroids"]:
+        for bullet in game_state["bullets"]:
+            difference = sub_2d_tuples(asteroid["position"], bullet["position"])
+
+            if tuple_length(difference) < ASTEROID_RADIUS:
+                game_state["asteroids"].remove(asteroid)
+                game_state["bullets"].remove(bullet)
+
 
 
 
@@ -224,6 +301,8 @@ def do_game_logic(game_state, delta_t):
 
 
 
+    do_hit_detection(game_state)
+    manage_asteroids(game_state)
 
     # Updating the position of all the bullets
     for bullet in game_state["bullets"]:
@@ -251,6 +330,10 @@ def draw_game(game_state, assets, screen):
     player = game_state["player"]
     draw_translated_image(assets["ship"], screen, player["position"], SHIP_SIZE, rad_to_deg(player["angle"]))
 
+    # Draw all the asteroids
+    for asteroid in game_state["asteroids"]:
+        size = (ASTEROID_RADIUS, ASTEROID_RADIUS)
+        draw_translated_image(assets["asteroid"], screen, asteroid["position"], size, 0)
 
     pygame.display.flip()
 
