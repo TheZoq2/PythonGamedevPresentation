@@ -15,6 +15,10 @@ This should probably be split into more files as there are a lot of functions
 Utility functions:
 """
 def draw_translated_image(image, screen, position, scale, rotation):
+    """
+    Draws the specified image to the screen at the specified angle and scale
+    with the center point at `position`
+    """
     # Apply the rotation and scale we want
     scaled = pygame.transform.scale(image, scale)
     rotated = pygame.transform.rotate(scaled, rotation)
@@ -82,6 +86,11 @@ def multiply_2d_tuple(tup, val):
     return (x * val, y * val)
 
 def sub_2d_tuples(tup1, tup2):
+    """
+    Subtracts each element in tup2 from tup1
+
+    tup1 and 2 are expected to contain 2 elements
+    """
     (x1, y1) = tup1
     (x2, y2) = tup2
     
@@ -89,6 +98,10 @@ def sub_2d_tuples(tup1, tup2):
 
 
 def tuple_length(tup):
+    """
+    Calculates the length of a tuple interpreted as a 2d vector using the
+    pythagorean theorem
+    """
     (x,y) = tup
     return math.sqrt(x ** 2 + y ** 2)
 
@@ -198,6 +211,9 @@ def add_bullet(game_state, position, speed):
 
 
 def remove_dead_bullets(game_state):
+    """
+    Removes any bulets that have existed for longer than BULLET_DESPAWN_TIME
+    """
     despawn_criteria = (lambda bullet: 
         True if time.time() - bullet["start_time"] > BULLET_DESPAWN_TIME else False)
 
@@ -242,15 +258,26 @@ def load_assets():
 
 
 def asteroid_despawn_condition(asteroid):
+    """
+    Predicate applied to check wether or not to remove an asteroid from the game.
+
+    Returns True if the asteroid should remain in the game, False otherwise
+    """
     center = multiply_2d_tuple(WINDOW_SIZE, 0.5)
     return tuple_length(sub_2d_tuples(asteroid["position"], center)) < ASTEROID_DESPAWN_RADIUS
 
 def update_asteroid(asteroid):
+    """
+    Updates the location of a given asteroid based on its velocity
+    """
     asteroid["position"] = add_2d_tuples(asteroid["position"], asteroid["velocity"])
     return asteroid
 
 
 def manage_asteroids(game_state):
+    """
+    Updates, removes and adds asteroids
+    """
     # Despawn asteroids that are too far away
     game_state["asteroids"] = list(filter(asteroid_despawn_condition, game_state["asteroids"]))
 
@@ -265,9 +292,7 @@ def manage_asteroids(game_state):
 
 def do_hit_detection(game_state):
     """
-    Checks for asteroids<-> bullet collision and remove them accordingly
-
-    TODO: Add score
+    Checks for asteroids<-> bullet collision and removes them accordingly
     """
     for asteroid in game_state["asteroids"]:
         for bullet in game_state["bullets"]:
